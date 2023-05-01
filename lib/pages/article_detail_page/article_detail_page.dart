@@ -89,32 +89,47 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                             flexibleSpace: FlexibleSpaceBar(
                               centerTitle: false,
                               title: Container(),
-                              background: InkWell(
-                                onTap: () {
-                                  if(state.listWatchVideo!= null && state.listWatchVideo!.isNotEmpty&& state.idMovie ==state.articleDetailModel?.id){
-                                    Navigator.of(context).pushNamed(
-                                        RouteName.watchVideoPreview,
-                                        arguments: {"movie": state.listWatchVideo});
-                                  } else {
-                                    Injector.resolve<ArticlePageBloc>().add(
-                                        ArticleVideoDetailEvent(
-                                            state.articleDetailModel?.id ?? 0));
-                                  }
-                                },
-                                child: Stack(fit: StackFit.expand,
-                                  children: [
-                                    Image(
-                                      image: NetworkImage(state.articleDetailModel
-                                                  ?.backdropPath !=
-                                              null
-                                          ? "${Configurations.imageUrl}${state.articleDetailModel?.posterPath!}"
-                                          : 'https://images.nintendolife.com/7eb5b6e59be08/a-hat-in-time-cover.cover_large.jpg'),
-                                      fit: BoxFit.fill,
-                                    ),
-                                    Center(child: Icon(Icons.play_circle_fill_rounded, size: 100,color: Colors.redAccent,))
-
-                                  ],
-                                ),
+                              background: Stack(
+                                fit: StackFit.expand,
+                                children: [
+                                  Image(
+                                    image: NetworkImage(state.articleDetailModel
+                                                ?.backdropPath !=
+                                            null
+                                        ? "${Configurations.imageUrl}${state.articleDetailModel?.posterPath!}"
+                                        : 'https://images.nintendolife.com/7eb5b6e59be08/a-hat-in-time-cover.cover_large.jpg'),
+                                    fit: BoxFit.fill,
+                                  ),
+                                  Center(
+                                      child: InkWell(
+                                          onTap: () {
+                                            if (state.listWatchVideo != null &&
+                                                state.listWatchVideo!
+                                                    .isNotEmpty &&
+                                                state.idMovie ==
+                                                    state.articleDetailModel
+                                                        ?.id) {
+                                              Navigator.of(context).pushNamed(
+                                                  RouteName.watchVideoPreview,
+                                                  arguments: {
+                                                    "movie":
+                                                        state.listWatchVideo
+                                                  });
+                                            } else {
+                                              Injector.resolve<
+                                                      ArticlePageBloc>()
+                                                  .add(ArticleVideoDetailEvent(
+                                                      state.articleDetailModel
+                                                              ?.id ??
+                                                          0));
+                                            }
+                                          },
+                                          child: Icon(
+                                            Icons.play_circle_fill_rounded,
+                                            size: 100,
+                                            color: Colors.redAccent,
+                                          )))
+                                ],
                               ),
                             ),
                           ),
