@@ -28,6 +28,14 @@ class ArticleReadDetailEvent extends ArticlePageEvent {
   List<Object> get props => [id];
 }
 
+class ArticleVideoDetailEvent extends ArticlePageEvent {
+  const ArticleVideoDetailEvent(this.id);
+  final int id;
+
+  @override
+  List<Object> get props => [id];
+}
+
 class ArticleBackEvent extends ArticlePageEvent {
   const ArticleBackEvent();
 

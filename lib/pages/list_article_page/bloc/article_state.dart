@@ -3,6 +3,7 @@ part of 'article_bloc.dart';
 class ArticlePageState extends Equatable with FormzMixin {
   final List<ArticleModel>? listArticle;
   final ArticleDetailModel? articleDetailModel;
+  final List<WatchVideoModel>? listWatchVideo;
   final FormzStatus? submitStatus;
   final String? errorMessage;
   final String? type;
@@ -16,6 +17,7 @@ class ArticlePageState extends Equatable with FormzMixin {
     this.articleDetailModel,
     this.listArticle,
     this.type,
+    this.listWatchVideo,
     this.isSearch = false,
     this.submitStatus = FormzStatus.pure,
     this.errorMessage,
@@ -28,6 +30,7 @@ class ArticlePageState extends Equatable with FormzMixin {
   ArticlePageState copyWith(
       {FormzStatus? submitStatus,
       ArticleDetailModel? articleDetailModel,
+        List<WatchVideoModel>? listWatchVideo,
       List<ArticleModel>? listArticle,
       bool? isSearch,
       String? type,
@@ -40,6 +43,7 @@ class ArticlePageState extends Equatable with FormzMixin {
         submitStatus: submitStatus,
         articleDetailModel: articleDetailModel ?? this.articleDetailModel,
         listArticle: listArticle ?? this.listArticle,
+        listWatchVideo: listWatchVideo ?? this.listWatchVideo,
         isSearch: isSearch ?? this.isSearch,
         type: type,
         isLast: isLast ?? this.isLast,

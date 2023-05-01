@@ -7,12 +7,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:formz/formz.dart';
 import 'package:intl/intl.dart';
 
-
+import '../../common/configurations/configurations.dart';
+import '../../common/injector/injector.dart';
+import '../../routes/route_name.dart';
 import '../../utils/epragnancy_color.dart';
 import '../list_article_page/bloc/article_bloc.dart';
 
 class ArticleDetailPage extends StatefulWidget {
-
   ArticleDetailPage();
 
   @override
@@ -40,45 +41,63 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
       },
       child: Scaffold(
         backgroundColor: Colors.white,
-        body: BlocBuilder<ArticlePageBloc, ArticlePageState>(
-          builder: (context, state) {
-            String outputDate = "";
-            var outputFormat = DateFormat.yMMMMd('id');
-            outputDate = outputFormat.format(DateTime.parse(
-                state.articleDetailModel?.released ?? "0000-00-00"));
+        body: BlocListener<ArticlePageBloc, ArticlePageState>(
+          listener: (context, state) {
+            if (state.submitStatus == FormzStatus.submissionSuccess &&
+                state.type == 'fetching-video') {
+              Navigator.of(context).pushNamed(
+                  RouteName.watchVideoPreview,
+                  arguments: {"movie": state.listWatchVideo});
+            }
+          },
+          child: BlocBuilder<ArticlePageBloc, ArticlePageState>(
+            builder: (context, state) {
+              String outputDate = "";
+              var outputFormat = DateFormat.yMMMMd('id');
+              outputDate = outputFormat.format(DateTime.parse(
+                  state.articleDetailModel?.releaseDate ?? "0000-00-00"));
 
-            return Stack(
-              children: [
-                NestedScrollView(
-                    headerSliverBuilder:
-                        (BuildContext context, bool innerBoxIsScrolled) {
-                      return <Widget>[
-                        SliverAppBar(
-                          expandedHeight: 300.0,
-                          floating: false,
-                          pinned: true,
-                          elevation: 0.0,
-                          leading: GestureDetector(
-                            child: const Icon(
-                              Icons.arrow_back_ios,
-                              color: Colors.grey,
+              return Stack(
+                children: [
+                  NestedScrollView(
+                      headerSliverBuilder:
+                          (BuildContext context, bool innerBoxIsScrolled) {
+                        return <Widget>[
+                          SliverAppBar(
+                            expandedHeight: 300.0,
+                            floating: false,
+                            pinned: true,
+                            elevation: 0.0,
+                            leading: GestureDetector(
+                              child: const Icon(
+                                Icons.arrow_back_ios,
+                                color: Colors.grey,
+                              ),
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
                             ),
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                          ),
-                          backgroundColor: Colors.white,
-                          flexibleSpace: FlexibleSpaceBar(
-                            centerTitle: false,
-                            title: Container(),
-                            background: Image(
-                              image: NetworkImage(state
-                                      .articleDetailModel?.backgroundImage ??
-                                  'https://images.nintendolife.com/7eb5b6e59be08/a-hat-in-time-cover.cover_large.jpg'),
-                              fit: BoxFit.cover,
+                            backgroundColor: Colors.white,
+                            flexibleSpace: FlexibleSpaceBar(
+                              centerTitle: false,
+                              title: Container(),
+                              background: InkWell(
+                                onTap: () {
+                                  Injector.resolve<ArticlePageBloc>().add(
+                                      ArticleVideoDetailEvent(
+                                          state.articleDetailModel?.id ?? 0));
+                                },
+                                child: Image(
+                                  image: NetworkImage(state.articleDetailModel
+                                              ?.backdropPath !=
+                                          null
+                                      ? "${Configurations.imageUrl}${state.articleDetailModel?.posterPath!}"
+                                      : 'https://images.nintendolife.com/7eb5b6e59be08/a-hat-in-time-cover.cover_large.jpg'),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
                         header(context, state,outputDate)
                       ];
                     },
@@ -86,25 +105,26 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                       children: [
                         Expanded(
                           child: SingleChildScrollView(
-                            child: Container(
-                                padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
-                                child: Html(
-                                    data:
-                                        state.articleDetailModel?.description ??
-                                            '',
-                                    style: {
-                                      "body": Style(
-                                          fontSize: FontSize(16.0),
-                                          color: Colors.black),
-                                    })),
+                              child: Container(
+                                  padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+                                  child: Html(
+                                      data:
+                                          state.articleDetailModel?.overview ??
+                                              '',
+                                      style: {
+                                        "body": Style(
+                                            fontSize: FontSize(16.0),
+                                            color: Colors.black),
+                                      })),
+                            ),
                           ),
-                        ),
-                      ],
-                    )),
-                _Loading()
-              ],
-            );
-          },
+                        ],
+                      )),
+                  _Loading()
+                ],
+              );
+            },
+          ),
         ),
       ),
     );
@@ -146,7 +166,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                       width: 100,
                       child: Center(
                           child: Text(
-                        "Rating : ${state.articleDetailModel?.rating.toString() ?? '0.0'}",
+                            "Rating : ${state.articleDetailModel?.voteAverage.toString() ?? '0.0'}",
                         style: TextStyle(
                             fontSize: 14,
                             color: Colors.white,
@@ -160,7 +180,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
               Container(
                 margin: EdgeInsets.only(top: 10),
                 child: Text(
-                  state.articleDetailModel?.name ?? '',
+                  state.articleDetailModel?.title ?? '',
                   maxLines: 5,
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   overflow: TextOverflow.clip,
@@ -171,7 +191,8 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                     child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         shrinkWrap: true,
-                        itemCount: state.articleDetailModel?.publishers?.length,
+                        itemCount: state
+                            .articleDetailModel?.productionCompanies?.length,
                         itemBuilder: (context, index) {
                           return Row(
                             children: [
@@ -184,9 +205,13 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                                 width: 180,
                                 child: Center(
                                     child: Text(
-                                  state.articleDetailModel?.publishers != null
-                                      ? state.articleDetailModel
-                                              ?.publishers![index].name ??
+                                  state.articleDetailModel
+                                              ?.productionCompanies !=
+                                          null
+                                      ? state
+                                              .articleDetailModel
+                                              ?.productionCompanies![index]
+                                              .name ??
                                           ''
                                       : '',
                                   textAlign: TextAlign.center,

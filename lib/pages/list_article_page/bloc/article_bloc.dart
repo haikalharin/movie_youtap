@@ -10,6 +10,7 @@ import '../../../common/exceptions/article_error_exception.dart';
 import '../../../data/model/article_detail_model/article_detail_model.dart';
 import '../../../data/model/article_model/article_model.dart';
 import '../../../data/model/response_model/response_model.dart';
+import '../../../data/model/watch_video_model/watch_video_model.dart';
 import '../../../data/repository/article_repository/article_repository.dart';
 
 part 'article_event.dart';
@@ -27,6 +28,8 @@ class ArticlePageBloc extends Bloc<ArticlePageEvent, ArticlePageState> {
       yield* _mapArticleFetchEventToState(event, state);
     } else if (event is ArticleReadDetailEvent) {
       yield* _mapArticleReadEventToState(event, state);
+    }else if (event is ArticleVideoDetailEvent) {
+      yield* _mapArticleVideoDetailEventToState(event, state);
     } else if (event is ArticleBackEvent) {
       yield _mapArticleBackEventToState(event, state);
     }
@@ -80,7 +83,7 @@ class ArticlePageBloc extends Bloc<ArticlePageEvent, ArticlePageState> {
           data = response.results;
         }
         next = response.next??'';
-        if (response.next != null) {
+        if (response.totalPage! > state.page) {
           page = state.page + 1;
         } else {
           isLast = true;
@@ -114,6 +117,29 @@ class ArticlePageBloc extends Bloc<ArticlePageEvent, ArticlePageState> {
             submitStatus: FormzStatus.submissionSuccess,
             articleDetailModel: response,
           type: 'fetching-detail',);
+      }
+
+    } on ArticleErrorException catch (e) {
+      print(e);
+      yield state.copyWith(submitStatus: FormzStatus.submissionFailure);
+    } on Exception catch (a) {}
+  }
+
+  Stream<ArticlePageState> _mapArticleVideoDetailEventToState(
+      ArticleVideoDetailEvent event,
+      ArticlePageState state,
+      ) async* {
+    // yield state.copyWith(
+    //     submitStatus: FormzStatus.submissionInProgress,
+    //     type: 'fetching-video');
+    try {
+
+      ResponseModel response = await articleRepository.readDetailVideoArticle(event.id);
+      if (response.results != null) {
+        yield state.copyWith(
+          submitStatus: FormzStatus.submissionSuccess,
+          listWatchVideo: response.results,
+          type: 'fetching-video');
       }
 
     } on ArticleErrorException catch (e) {

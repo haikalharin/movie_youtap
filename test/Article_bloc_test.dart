@@ -21,9 +21,9 @@ var listData = ResponseModel(
     results: [dataArticle, dataArticle, dataArticle]);
 var dataDetail = ArticleDetailModel(
     id: 437049,
-    slug: "fifa-21",
-    name: "FIFA 21",
-    nameOriginal: "FIFA 21");
+    title: "fifa-21",
+    originalTitle: "FIFA 21",
+    overview: "FIFA 21");
 
 var dataMap = {
   "id": 437049,

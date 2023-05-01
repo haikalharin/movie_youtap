@@ -16,211 +16,92 @@ String articleDetailModelToJson(ArticleDetailModel data) => json.encode(data.toJ
 class ArticleDetailModel with _$ArticleDetailModel {
   @JsonSerializable(fieldRename: FieldRename.snake,includeIfNull: true, explicitToJson: true)
   const factory ArticleDetailModel({
+    bool? adult,
+    String? backdropPath,
+    BelongsToCollection? belongsToCollection,
+    int? budget,
+    List<Genre>? genres,
+    String? homepage,
     int? id,
-    String? slug,
-    String? name,
-    String? nameOriginal,
-    String? description,
-    int? metacritic,
-    List<MetacriticPlatform>? metacriticPlatforms,
-    String? released,
-    bool? tba,
-    String? updated,
-    String? backgroundImage,
-    String? backgroundImageAdditional,
-    String? website,
-    double? rating,
-    int? ratingTop,
-    List<Rating>? ratings,
-    Reactions? reactions,
-    int? added,
-    AddedByStatus? addedByStatus,
-    int? playtime,
-    int? screenshotsCount,
-    int? moviesCount,
-    int? creatorsCount,
-    int? achievementsCount,
-    int? parentAchievementsCount,
-    String? redditUrl,
-    String? redditName,
-    String? redditDescription,
-    String? redditLogo,
-    int? redditCount,
-    int? twitchCount,
-    int? youtubeCount,
-    int? reviewsTextCount,
-    int? ratingsCount,
-    int? suggestionsCount,
-    List<dynamic>? alternativeNames,
-    String? metacriticUrl,
-    int? parentsCount,
-    int? additionsCount,
-    int? gameSeriesCount,
-   dynamic userGame,
-    int? reviewsCount,
-    String? saturatedColor,
-    String? dominantColor,
-    List<ParentPlatform>? parentPlatforms,
-    List<PlatformElement>? platforms,
-    List<Store>? stores,
-    List<Developer>? developers,
-    List<Developer>? genres,
-    List<Developer>? tags,
-    List<Developer>? publishers,
-   dynamic esrbRating,
-   dynamic clip,
-    String? descriptionRaw,
+    String? imdbId,
+    String? originalLanguage,
+    String? originalTitle,
+    String? overview,
+    double? popularity,
+    String? posterPath,
+    List<ProductionCompany>? productionCompanies,
+    List<ProductionCountry>? productionCountries,
+    String? releaseDate,
+    int? revenue,
+    int? runtime,
+    List<SpokenLanguage>? spokenLanguages,
+    String? status,
+    String? tagline,
+    String? title,
+    bool? video,
+    double? voteAverage,
+    int? voteCount,
   }) = _ArticleDetailModel;
 
   factory ArticleDetailModel.fromJson(Map<String, dynamic> json) => _$ArticleDetailModelFromJson(json);
 }
 
 @freezed
-class AddedByStatus with _$AddedByStatus {
+class BelongsToCollection with _$BelongsToCollection {
   @JsonSerializable(fieldRename: FieldRename.snake,includeIfNull: true, explicitToJson: true)
-  const factory AddedByStatus({
-    int? yet,
-    int? owned,
-    int? beaten,
-    int? toplay,
-    int? dropped,
-    int? playing,
-  }) = _AddedByStatus;
-
-  factory AddedByStatus.fromJson(Map<String, dynamic> json) => _$AddedByStatusFromJson(json);
-}
-
-@freezed
-class Developer with _$Developer {
-  @JsonSerializable(fieldRename: FieldRename.snake,includeIfNull: true, explicitToJson: true)
-  const factory Developer({
+  const factory BelongsToCollection({
     int? id,
     String? name,
-    String? slug,
-    int? gamesCount,
-    String? imageBackground,
-    String? domain,
-    String? language,
-  }) = _Developer;
+    String? posterPath,
+    String? backdropPath,
+  }) = _BelongsToCollection;
 
-  factory Developer.fromJson(Map<String, dynamic> json) => _$DeveloperFromJson(json);
+  factory BelongsToCollection.fromJson(Map<String, dynamic> json) => _$BelongsToCollectionFromJson(json);
 }
 
 @freezed
-class MetacriticPlatform with _$MetacriticPlatform {
+class Genre with _$Genre {
   @JsonSerializable(fieldRename: FieldRename.snake,includeIfNull: true, explicitToJson: true)
-  const factory MetacriticPlatform({
-    int? metascore,
-    String? url,
-    MetacriticPlatformPlatform? platform,
-  }) = _MetacriticPlatform;
-
-  factory MetacriticPlatform.fromJson(Map<String, dynamic> json) => _$MetacriticPlatformFromJson(json);
-}
-
-@freezed
-class MetacriticPlatformPlatform with _$MetacriticPlatformPlatform {
-  @JsonSerializable(fieldRename: FieldRename.snake,includeIfNull: true, explicitToJson: true)
-  const factory MetacriticPlatformPlatform({
-    int? platform,
-    String? name,
-    String? slug,
-  }) = _MetacriticPlatformPlatform;
-
-  factory MetacriticPlatformPlatform.fromJson(Map<String, dynamic> json) => _$MetacriticPlatformPlatformFromJson(json);
-}
-
-@freezed
-class ParentPlatform with _$ParentPlatform {
-  @JsonSerializable(fieldRename: FieldRename.snake,includeIfNull: true, explicitToJson: true)
-  const factory ParentPlatform({
-    ParentPlatformPlatform? platform,
-  }) = _ParentPlatform;
-
-  factory ParentPlatform.fromJson(Map<String, dynamic> json) => _$ParentPlatformFromJson(json);
-}
-
-@freezed
-class ParentPlatformPlatform with _$ParentPlatformPlatform {
-  @JsonSerializable(fieldRename: FieldRename.snake,includeIfNull: true, explicitToJson: true)
-  const factory ParentPlatformPlatform({
+  const factory Genre({
     int? id,
     String? name,
-    String? slug,
-  }) = _ParentPlatformPlatform;
+  }) = _Genre;
 
-  factory ParentPlatformPlatform.fromJson(Map<String, dynamic> json) => _$ParentPlatformPlatformFromJson(json);
+  factory Genre.fromJson(Map<String, dynamic> json) => _$GenreFromJson(json);
 }
 
 @freezed
-class PlatformElement with _$PlatformElement {
+class ProductionCompany with _$ProductionCompany {
   @JsonSerializable(fieldRename: FieldRename.snake,includeIfNull: true, explicitToJson: true)
-  const factory PlatformElement({
-    PlatformPlatform? platform,
-    String? releasedAt,
-    Requirements? requirements,
-  }) = _PlatformElement;
-
-  factory PlatformElement.fromJson(Map<String, dynamic> json) => _$PlatformElementFromJson(json);
-}
-
-@freezed
-class PlatformPlatform with _$PlatformPlatform {
-  @JsonSerializable(fieldRename: FieldRename.snake,includeIfNull: true, explicitToJson: true)
-  const factory PlatformPlatform({
+  const factory ProductionCompany({
     int? id,
+    String? logoPath,
     String? name,
-    String? slug,
-   dynamic image,
-   dynamic yearEnd,
-    int? yearStart,
-    int? gamesCount,
-    String? imageBackground,
-  }) = _PlatformPlatform;
+    String? originCountry,
+  }) = _ProductionCompany;
 
-  factory PlatformPlatform.fromJson(Map<String, dynamic> json) => _$PlatformPlatformFromJson(json);
+  factory ProductionCompany.fromJson(Map<String, dynamic> json) => _$ProductionCompanyFromJson(json);
 }
 
 @freezed
-class Requirements with _$Requirements {
+class ProductionCountry with _$ProductionCountry {
   @JsonSerializable(fieldRename: FieldRename.snake,includeIfNull: true, explicitToJson: true)
-  const factory Requirements({
-    String? minimum,
-    String? recommended,
-  }) = _Requirements;
+  const factory ProductionCountry({
+    String? iso31661,
+    String? name,
+  }) = _ProductionCountry;
 
-  factory Requirements.fromJson(Map<String, dynamic> json) => _$RequirementsFromJson(json);
+  factory ProductionCountry.fromJson(Map<String, dynamic> json) => _$ProductionCountryFromJson(json);
 }
 
 @freezed
-class Rating with _$Rating {
+class SpokenLanguage with _$SpokenLanguage {
   @JsonSerializable(fieldRename: FieldRename.snake,includeIfNull: true, explicitToJson: true)
-  const factory Rating({
-    int? id,
-    String? title,
-    int? count,
-    double? percent,
-  }) = _Rating;
+  const factory SpokenLanguage({
+    String? englishName,
+    String? iso6391,
+    String? name,
+  }) = _SpokenLanguage;
 
-  factory Rating.fromJson(Map<String, dynamic> json) => _$RatingFromJson(json);
-}
-
-@freezed
-class Reactions with _$Reactions {
-  @JsonSerializable(fieldRename: FieldRename.snake,includeIfNull: true, explicitToJson: true)
-  const factory Reactions() = _Reactions;
-
-  factory Reactions.fromJson(Map<String, dynamic> json) => _$ReactionsFromJson(json);
-}
-
-@freezed
-class Store with _$Store {
-  @JsonSerializable(fieldRename: FieldRename.snake,includeIfNull: true, explicitToJson: true)
-  const factory Store({
-    int? id,
-    String? url,
-    Developer? store,
-  }) = _Store;
-
-  factory Store.fromJson(Map<String, dynamic> json) => _$StoreFromJson(json);
+  factory SpokenLanguage.fromJson(Map<String, dynamic> json) => _$SpokenLanguageFromJson(json);
 }

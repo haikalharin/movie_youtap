@@ -1,9 +1,11 @@
 import 'package:base_app_new/common/configurations/configurations.dart';
+import 'package:base_app_new/data/datasource/remote/url/service_url.dart';
 
 import '../../common/network/http/http_client.dart';
 import '../model/article_detail_model/article_detail_model.dart';
 import '../model/article_model/article_model.dart';
 import '../model/response_model/response_model.dart';
+import '../model/watch_video_model/watch_video_model.dart';
 
 class RemoteDataSource {
   final HttpClient httpClient;
@@ -17,15 +19,12 @@ class RemoteDataSource {
     try {
       Map<String, String> qParams = {
         'page': page,
-        'page_size': '20',
-        'platforms': '187',
-        'dates': '$start,$end',
-        'ordering': '-released',
-        'key': '02ef6ba5d13444ee86bad607e8bce3f4',
+        'language':'en-US',
+        'api_key': Configurations.key,
 
       };
       final response = await httpClient.get(
-          "games",queryParameters: qParams);
+          ServiceUrl.moviePopular,queryParameters: qParams);
       var data = ResponseModel.fromJson(response, ArticleModel.fromJson);
       return data;
     } catch (e) {
@@ -36,14 +35,30 @@ class RemoteDataSource {
   Future<ArticleDetailModel> readDetailArticle(int id) async {
     try {
       Map<String, String> qParams = {
-        'key': Configurations.key,
+        'language':'en-US',
+        'api_key': Configurations.key,
       };
       final response = await httpClient.get(
-          "games/$id",queryParameters: qParams);
+          "${ServiceUrl.movie}/$id",queryParameters: qParams);
       var data = ArticleDetailModel.fromJson(response);
       return data;
     } catch (e) {
       return ArticleDetailModel();
+    }
+  }
+
+  Future<ResponseModel> readDetailVideoArticle(int id) async {
+    try {
+      Map<String, String> qParams = {
+        'language':'en-US',
+        'api_key': Configurations.key,
+      };
+      final response = await httpClient.get(
+          "${ServiceUrl.movie}/$id/${ServiceUrl.videos}",queryParameters: qParams);
+      var data = ResponseModel.fromJson(response,WatchVideoModel.fromJson);
+      return data;
+    } catch (e) {
+      return ResponseModel.resultsEmpty();
     }
   }
 }

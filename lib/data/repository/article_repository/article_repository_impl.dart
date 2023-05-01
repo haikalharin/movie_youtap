@@ -7,6 +7,7 @@ import '../../../common/network/network_info.dart';
 import '../../datasource/remote_datasource.dart';
 
 import '../../model/response_model/response_model.dart';
+import '../../model/watch_video_model/watch_video_model.dart';
 import 'article_repository.dart';
 
 class ArticleRepositoryImpl extends ArticleRepository {
@@ -24,6 +25,12 @@ class ArticleRepositoryImpl extends ArticleRepository {
   @override
   Future<ArticleDetailModel> readDetailArticle(int id) async {
       return remoteDatasource.readDetailArticle(id);
+
+  }
+
+  @override
+  Future<ResponseModel> readDetailVideoArticle(int id) async {
+    return remoteDatasource.readDetailVideoArticle(id);
 
   }
 

@@ -14,11 +14,12 @@ import 'bloc/article_bloc.dart';
 
 class ListArticleVertical extends StatefulWidget {
   List<ArticleModel>? listArticle = [];
-  String? condition = '';
+  String? category = '';
+  String? title = '';
   bool? isSearch = false;
 
   ListArticleVertical(
-      {this.listArticle, this.condition, this.isSearch = false});
+      {this.listArticle, this.category,this.title, this.isSearch = false});
 
   @override
   State<ListArticleVertical> createState() => _ListArticleVerticalState();
@@ -60,7 +61,7 @@ class _ListArticleVerticalState extends State<ListArticleVertical> {
       child: BlocBuilder<ArticlePageBloc, ArticlePageState>(
         builder: (context, state) {
           return Scaffold(
-            appBar: AppBar(title: Text('Playstation 5 Games'),),
+            appBar: AppBar(title: Text(widget.title??''),),
             body: Stack(
               children: [
                 Container(

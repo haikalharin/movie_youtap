@@ -1,11 +1,14 @@
 
 class ResponseModel<T> {
   int? count;
+  int? id;
   String? next;
   String? previous;
+  String? statusMessage;
+  int? statusCode;
   dynamic results;
   String? action;
-  int? total;
+  int? totalPage;
   int? perPage;
   int? page;
   int? currentPage;
@@ -15,11 +18,14 @@ class ResponseModel<T> {
 
   ResponseModel({
     this.count,
+    this.id,
     this.next,
     this.previous,
+    this.statusMessage,
+    this.statusCode,
     this.results,
     this.action,
-    this.total,
+    this.totalPage,
     this.perPage,
     this.page,
     this.currentPage,
@@ -30,8 +36,11 @@ class ResponseModel<T> {
 
   ResponseModel.fromJson(Map<String, dynamic> json, T fromJson(Map<String, dynamic> json)) {
     count = json['count'];
+    id = json['id'];
     next = json['next'];
     previous = json['previous'];
+    statusMessage = json['status_message'];
+    statusCode = json['status_code'];
     action = json['action'];
 
     if (json["results"] != null && fromJson != null) {
@@ -42,7 +51,7 @@ class ResponseModel<T> {
       }
     }
 
-    total = json['total'];
+    totalPage = json['total_pages'];
     perPage = json['per_page'];
     page = json['page'];
     currentPage = json['current_page'];
@@ -54,8 +63,11 @@ class ResponseModel<T> {
 
   ResponseModel<T> copyWith({
     int? nextcount,
+    int? id,
     String? nextprevious,
     String? errorprevious,
+    String? statusMessage,
+    int? statusCode,
     String? action,
     dynamic results,
     int? total,
@@ -69,11 +81,14 @@ class ResponseModel<T> {
   }) {
     return ResponseModel<T>(
       count: nextcount ?? this.count,
+      id: id ?? this.id,
       next: nextprevious ?? this.next,
       previous: errorprevious ?? this.previous,
+      statusMessage: statusMessage ?? this.statusMessage,
+      statusCode: statusCode ?? this.statusCode,
       action: action ?? this.action,
       results: results ?? this.results,
-      total: total ?? this.total,
+      totalPage: total ?? this.totalPage,
       perPage: perPage ?? this.perPage,
       page: page ?? this.page,
       currentPage: currentPage ?? this.currentPage,
@@ -90,6 +105,7 @@ class ResponseModel<T> {
   static ResponseModel resultsEmpty({dynamic results}) {
     return ResponseModel(
      count: 0,
+     id: 0,
       page: 0,
       next: '',
       previous: '',

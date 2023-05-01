@@ -306,7 +306,9 @@ class __$ArticleModelCopyWithImpl<$Res> extends _$ArticleModelCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(
+    fieldRename: FieldRename.snake, includeIfNull: true, explicitToJson: true)
 class _$_ArticleModel implements _ArticleModel {
   const _$_ArticleModel(
       {this.adult,
