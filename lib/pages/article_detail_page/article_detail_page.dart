@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -48,7 +49,14 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
               Navigator.of(context).pushNamed(
                   RouteName.watchVideoPreview,
                   arguments: {"movie": state.listWatchVideo});
+            }else if (state.submitStatus == FormzStatus.submissionSuccess &&
+            state.type == 'fetching-video') {
+              var snackBar = SnackBar(
+                  content: Text("video tidak tersedia"),
+                  backgroundColor: Colors.red);
+              Scaffold.of(context).showSnackBar(snackBar);
             }
+
           },
           child: BlocBuilder<ArticlePageBloc, ArticlePageState>(
             builder: (context, state) {
@@ -87,13 +95,19 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                                       ArticleVideoDetailEvent(
                                           state.articleDetailModel?.id ?? 0));
                                 },
-                                child: Image(
-                                  image: NetworkImage(state.articleDetailModel
-                                              ?.backdropPath !=
-                                          null
-                                      ? "${Configurations.imageUrl}${state.articleDetailModel?.posterPath!}"
-                                      : 'https://images.nintendolife.com/7eb5b6e59be08/a-hat-in-time-cover.cover_large.jpg'),
-                                  fit: BoxFit.cover,
+                                child: Stack(fit: StackFit.expand,
+                                  children: [
+                                    Image(
+                                      image: NetworkImage(state.articleDetailModel
+                                                  ?.backdropPath !=
+                                              null
+                                          ? "${Configurations.imageUrl}${state.articleDetailModel?.posterPath!}"
+                                          : 'https://images.nintendolife.com/7eb5b6e59be08/a-hat-in-time-cover.cover_large.jpg'),
+                                      fit: BoxFit.fill,
+                                    ),
+                                    Center(child: Icon(Icons.play_circle_fill_rounded, size: 100,color: Colors.redAccent,))
+
+                                  ],
                                 ),
                               ),
                             ),
@@ -162,11 +176,11 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10.0),
                           color: EpregnancyColors.green),
-                      height: 30,
-                      width: 100,
+                      height: 40,
+                      width: 120,
                       child: Center(
                           child: Text(
-                            "Rating : ${state.articleDetailModel?.voteAverage.toString() ?? '0.0'}",
+                            "Rating : ${state.articleDetailModel?.voteAverage?.round()?? '0.0'}/10",
                         style: TextStyle(
                             fontSize: 14,
                             color: Colors.white,

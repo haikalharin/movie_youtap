@@ -17,8 +17,8 @@ class ArticleRepositoryImpl extends ArticleRepository {
 
   @override
   Future<ResponseModel> fetchArticle(
-      int page,String start, String end) async {
-      return remoteDatasource.fetchArticle(page.toString(),start,end);
+      int page,String start, String end,String category,String keyword, bool isSearch) async {
+      return remoteDatasource.fetchArticle(page.toString(),start,end,category,keyword,isSearch);
 
   }
 

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:base_app_new/common/constants/string_constants.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
@@ -14,7 +15,6 @@ import '../../../data/model/watch_video_model/watch_video_model.dart';
 import '../../../data/repository/article_repository/article_repository.dart';
 
 part 'article_event.dart';
-
 part 'article_state.dart';
 
 class ArticlePageBloc extends Bloc<ArticlePageEvent, ArticlePageState> {
@@ -55,7 +55,7 @@ class ArticlePageBloc extends Bloc<ArticlePageEvent, ArticlePageState> {
     }else {
       yield state.copyWith(
           submitStatus: FormzStatus.submissionInProgress,
-          type: 'fetching-article');
+          type: 'fetching-article-${event.category}');
     }
     try {
       int? page = state.page;
@@ -69,33 +69,78 @@ class ArticlePageBloc extends Bloc<ArticlePageEvent, ArticlePageState> {
         page = event.page ?? 1;
       }
 
-
       ResponseModel response = await articleRepository.fetchArticle(
-          page, startString, endString);
-      List<ArticleModel>data = [];
+          page, startString, endString, event.category ?? '',event.keyword??'',event.isSearch??false);
+      List<ArticleModel> data = [];
       String next = '';
 
       if (response.results != null) {
         if (state.listArticle != null && event.page != 1) {
-          data = state.listArticle??[];
+          data = state.listArticle ?? [];
           data.addAll(response.results);
         } else {
           data = response.results;
         }
-        next = response.next??'';
+        next = response.next ?? '';
         if (response.totalPage! > state.page) {
           page = state.page + 1;
         } else {
           isLast = true;
         }
       }
-      yield state.copyWith(
-          submitStatus: FormzStatus.submissionSuccess,
-          listArticle: data,
-          page: page,
-          isLast: isLast,
-          next: next,
-      type: 'fetching-article');
+      if (event.category == CategoryConstans.popular) {
+        yield state.copyWith(
+            submitStatus: FormzStatus.submissionSuccess,
+            listArticlePopular: data,
+            listArticle: data,
+            page: page,
+            isLast: isLast,
+            next: next,
+            type: 'fetching-article');
+      } else if (event.category == CategoryConstans.now_playing) {
+        yield state.copyWith(
+            submitStatus: FormzStatus.submissionSuccess,
+            listArticleNowPlaying: data,
+            listArticle: data,
+            page: page,
+            isLast: isLast,
+            next: next,
+            type: 'fetching-article');
+      } else if (event.category == CategoryConstans.upcoming) {
+        yield state.copyWith(
+            submitStatus: FormzStatus.submissionSuccess,
+            listArticleUpcoming: data,
+            listArticle: data,
+            page: page,
+            isLast: isLast,
+            next: next,
+            type: 'fetching-article');
+      } else if (event.category == CategoryConstans.top_rated) {
+        yield state.copyWith(
+            submitStatus: FormzStatus.submissionSuccess,
+            listArticleTopRated: data,
+            listArticle: data,
+            page: page,
+            isLast: isLast,
+            next: next,
+            type: 'fetching-article');
+      }  else if (event.category == CategoryConstans.search) {
+        yield state.copyWith(
+            submitStatus: FormzStatus.submissionSuccess,
+            listArticle: data,
+            page: page,
+            isLast: isLast,
+            next: next,
+            type: 'fetching-article');
+      } else {
+        yield state.copyWith(
+            submitStatus: FormzStatus.submissionSuccess,
+            listArticle: data,
+            page: page,
+            isLast: isLast,
+            next: next,
+            type: 'fetching-article');
+      }
     } on ArticleErrorException catch (e) {
       print(e);
       yield state.copyWith(submitStatus: FormzStatus.submissionFailure);
@@ -135,13 +180,16 @@ class ArticlePageBloc extends Bloc<ArticlePageEvent, ArticlePageState> {
     try {
 
       ResponseModel response = await articleRepository.readDetailVideoArticle(event.id);
-      if (response.results != null) {
+      if (response.results != null && response.results != []) {
         yield state.copyWith(
-          submitStatus: FormzStatus.submissionSuccess,
-          listWatchVideo: response.results,
-          type: 'fetching-video');
+            submitStatus: FormzStatus.submissionSuccess,
+            listWatchVideo: response.results,
+            type: 'fetching-video');
+      } else {
+        yield state.copyWith(
+            submitStatus: FormzStatus.submissionFailure,
+            type: 'fetching-video');
       }
-
     } on ArticleErrorException catch (e) {
       print(e);
       yield state.copyWith(submitStatus: FormzStatus.submissionFailure);

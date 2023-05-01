@@ -1,17 +1,15 @@
-import 'package:base_app_new/pages/home_page/list_article_horizontal.dart';
+import 'package:base_app_new/common/constants/string_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:formz/formz.dart';
-import 'package:intl/intl.dart';
-import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+
 import '../../common/injector/injector.dart';
 import '../../data/model/article_model/article_model.dart';
 import '../../routes/route_name.dart';
 import '../../utils/epragnancy_color.dart';
 import '../list_article_page/bloc/article_bloc.dart';
-import 'list_shimmer.dart';
+import 'listCategoryMovie.dart';
 
 class HomePage extends StatefulWidget {
   List<ArticleModel>? listArticle = [];
@@ -30,14 +28,28 @@ class _HomePage extends State<HomePage> {
       GlobalKey<LiquidPullToRefreshState>();
   Future<void> _handleRefresh() async {
     if (widget.isSearch == false) {
-      Injector.resolve<ArticlePageBloc>().add(ArticleFetchEvent(page: 1));
+      Injector.resolve<ArticlePageBloc>()
+          .add(ArticleFetchEvent(page: 1, category: CategoryConstans.popular));
+      Injector.resolve<ArticlePageBloc>()
+          .add(ArticleFetchEvent(page: 1, category: CategoryConstans.now_playing));
+      Injector.resolve<ArticlePageBloc>()
+          .add(ArticleFetchEvent(page: 1, category: CategoryConstans.top_rated));
+      Injector.resolve<ArticlePageBloc>()
+          .add(ArticleFetchEvent(page: 1, category: CategoryConstans.upcoming));
     }
   }
 
   @override
   void initState() {
     if (widget.isSearch == false) {
-      Injector.resolve<ArticlePageBloc>().add(ArticleFetchEvent(page: 1));
+      Injector.resolve<ArticlePageBloc>()
+          .add(ArticleFetchEvent(page: 1, category: CategoryConstans.popular));
+      Injector.resolve<ArticlePageBloc>()
+          .add(ArticleFetchEvent(page: 1, category: CategoryConstans.now_playing));
+      Injector.resolve<ArticlePageBloc>()
+          .add(ArticleFetchEvent(page: 1, category: CategoryConstans.top_rated));
+      Injector.resolve<ArticlePageBloc>()
+          .add(ArticleFetchEvent(page: 1, category: CategoryConstans.upcoming));
     }
 
 
@@ -61,18 +73,32 @@ class _HomePage extends State<HomePage> {
       child: BlocBuilder<ArticlePageBloc, ArticlePageState>(
         builder: (context, state) {
           return Scaffold(
-            appBar: AppBar(title: Text('Playstation 5 Games'),),
+            appBar: AppBar(
+              title: Text('Movie'),
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(RouteName.listArticlePage,
+                        arguments: {
+                          "category_movie": CategoryConstans.search,
+                          "is_search": true
+                        });
+                  },
+                ),
+              ],
+            ),
             body: Stack(
               children: [
                 Container(
-                    margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                     decoration: BoxDecoration(color: Colors.white),
-                    child: state.listArticle == null
+                    child: state.listArticlePopular == null
                         ? Stack(children: [
                             Container(
                                 margin: EdgeInsets.only(), child: Container())
                           ])
-                        : state.listArticle!.isEmpty
+                        : state.listArticlePopular!.isEmpty
                             ? Container(
                                 width: MediaQuery.of(context).size.width,
                                 child: Center(
@@ -84,80 +110,38 @@ class _HomePage extends State<HomePage> {
                                       Expanded(
                                         child: Scrollbar(
                                           child: LiquidPullToRefresh(
-                                              color: EpregnancyColors.primer,
+                                              color: Colors.green,
                                               key: _refreshIndicatorKey,
                                               onRefresh: _handleRefresh,
                                               showChildOpacityTransition:
                                                   false,
-                                              child: Column(
+                                              child: ListView(
                                                 children: [
-                                                  Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Container(
-                                                        padding: EdgeInsets.only(
-                                                            left: 20, right: 20, bottom: 8),
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                          MainAxisAlignment.spaceBetween,
-                                                          children: [
-                                                            Container(
-                                                                child: const Text(
-                                                                  "Artikel Untuk Anda",
-                                                                  style: TextStyle(
-                                                                      fontSize: 16,
-                                                                      fontWeight: FontWeight.w700),
-                                                                )),
-                                                            InkWell(
-                                                              onTap: () {
-
-                                                                Navigator.of(context).pushNamed(
-                                                                    RouteName.articleDetailPage);
-                                                              },
-                                                              child: Container(
-                                                                child: Row(
-                                                                  children: [
-                                                                    Container(
-                                                                        margin:
-                                                                        EdgeInsets.only(right: 5),
-                                                                        child: Text(
-                                                                          "Artikel lainnya",
-                                                                          style: TextStyle(
-                                                                              fontSize: 12,
-                                                                              fontWeight:
-                                                                              FontWeight.w500,
-                                                                              color: Colors.grey),
-                                                                        )),
-                                                                    Container(
-                                                                      child: const Icon(
-                                                                        Icons.arrow_forward_ios,
-                                                                        size: 20,
-                                                                        color: Colors.grey,
-                                                                      ),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      Row(
-                                                        children: [
-                                                          state.submitStatus ==
-                                                              FormzStatus
-                                                                  .submissionInProgress &&
-                                                              state.type == 'listArticle'
-                                                              ? Expanded(child: ListShimmer())
-                                                              : Expanded(
-                                                              child: ListArticleHorizontal(
-                                                                listArticle:
-                                                                state.listArticle ?? [],
-                                                              ))
-                                                        ],
-                                                      ),
-                                                    ],
+                                                  ListCategoryMovie(
+                                                    category: CategoryConstans
+                                                        .popular,
+                                                    listArticle: state
+                                                        .listArticlePopular,
                                                   ),
+                                                  ListCategoryMovie(
+                                                    category: CategoryConstans
+                                                        .now_playing,
+                                                    listArticle: state
+                                                        .listArticleNowPlaying,
+                                                  ),
+                                                  ListCategoryMovie(
+                                                    category: CategoryConstans
+                                                        .upcoming,
+                                                    listArticle: state
+                                                        .listArticleUpcoming,
+                                                  ),
+                                                  ListCategoryMovie(
+                                                    category: CategoryConstans
+                                                        .top_rated,
+                                                    listArticle: state
+                                                        .listArticleTopRated,
+                                                  ),
+                                                  SizedBox(height: 24,)
                                                 ],
                                               )),
                                         ),
@@ -173,7 +157,6 @@ class _HomePage extends State<HomePage> {
                                   ),
                                 ],
                               )),
-                _Loading(),
               ],
             ),
           );

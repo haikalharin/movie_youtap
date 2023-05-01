@@ -2,6 +2,10 @@ part of 'article_bloc.dart';
 
 class ArticlePageState extends Equatable with FormzMixin {
   final List<ArticleModel>? listArticle;
+  final List<ArticleModel>? listArticlePopular;
+  final List<ArticleModel>? listArticleUpcoming;
+  final List<ArticleModel>? listArticleNowPlaying;
+  final List<ArticleModel>? listArticleTopRated;
   final ArticleDetailModel? articleDetailModel;
   final List<WatchVideoModel>? listWatchVideo;
   final FormzStatus? submitStatus;
@@ -14,6 +18,10 @@ class ArticlePageState extends Equatable with FormzMixin {
   final String next;
 
   ArticlePageState({
+    this.listArticlePopular,
+    this.listArticleUpcoming,
+    this.listArticleNowPlaying,
+    this.listArticleTopRated,
     this.articleDetailModel,
     this.listArticle,
     this.type,
@@ -30,8 +38,12 @@ class ArticlePageState extends Equatable with FormzMixin {
   ArticlePageState copyWith(
       {FormzStatus? submitStatus,
       ArticleDetailModel? articleDetailModel,
-        List<WatchVideoModel>? listWatchVideo,
+      List<WatchVideoModel>? listWatchVideo,
       List<ArticleModel>? listArticle,
+      List<ArticleModel>? listArticlePopular,
+      List<ArticleModel>? listArticleUpcoming,
+      List<ArticleModel>? listArticleNowPlaying,
+      List<ArticleModel>? listArticleTopRated,
       bool? isSearch,
       String? type,
       bool? isLast,
@@ -43,7 +55,11 @@ class ArticlePageState extends Equatable with FormzMixin {
         submitStatus: submitStatus,
         articleDetailModel: articleDetailModel ?? this.articleDetailModel,
         listArticle: listArticle ?? this.listArticle,
-        listWatchVideo: listWatchVideo ?? this.listWatchVideo,
+        listArticleUpcoming: listArticleUpcoming ?? this.listArticleUpcoming,
+        listArticleNowPlaying: listArticleNowPlaying ?? this.listArticleNowPlaying,
+        listArticlePopular: listArticlePopular ?? this.listArticlePopular,
+        listArticleTopRated: listArticleTopRated ?? this.listArticleTopRated,
+        listWatchVideo: listWatchVideo,
         isSearch: isSearch ?? this.isSearch,
         type: type,
         isLast: isLast ?? this.isLast,

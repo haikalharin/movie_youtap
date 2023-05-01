@@ -63,3 +63,11 @@ class CommonTextConstants {
   static const uploadNpwpSuccess = 'common.snackbar.uploadNpwpSuccess';
   static const uploadNpwpFail = 'common.snackbar.uploadNpwpFail';
 }
+
+class CategoryConstans{
+  static const popular = 'popular';
+  static const now_playing = 'now_playing';
+  static const top_rated = 'top_rated';
+  static const upcoming = 'upcoming';
+  static const search = 'search';
+}

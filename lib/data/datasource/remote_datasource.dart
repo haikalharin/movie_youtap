@@ -15,7 +15,7 @@ class RemoteDataSource {
 
 
 
-  Future<ResponseModel> fetchArticle(String page,String start, String end) async {
+  Future<ResponseModel> fetchArticle(String page,String start, String end,String category,String keyword, bool isSearch) async {
     try {
       Map<String, String> qParams = {
         'page': page,
@@ -23,9 +23,23 @@ class RemoteDataSource {
         'api_key': Configurations.key,
 
       };
-      final response = await httpClient.get(
-          ServiceUrl.moviePopular,queryParameters: qParams);
-      var data = ResponseModel.fromJson(response, ArticleModel.fromJson);
+      final response;
+      if(isSearch) {
+        qParams = {
+          'page': page,
+          'language': 'en-US',
+          'query': keyword,
+          'api_key': Configurations.key,
+        };
+        response = await httpClient.get(
+            "search/${ServiceUrl.movie}",queryParameters: qParams);
+
+      } else{
+        response = await httpClient.get(
+            "${ServiceUrl.movie}/$category",queryParameters: qParams);
+
+      }
+           var data = ResponseModel.fromJson(response, ArticleModel.fromJson);
       return data;
     } catch (e) {
       return ResponseModel.resultsEmpty();

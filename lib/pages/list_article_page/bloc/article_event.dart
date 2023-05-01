@@ -11,9 +11,12 @@ abstract class ArticlePageEvent extends Equatable {
 enum SortEnum { asc, desc }
 
 class ArticleFetchEvent extends ArticlePageEvent {
-  const ArticleFetchEvent({this.page = 0,this.isBottomScroll=false});
+  const ArticleFetchEvent({this.page = 0,this.isBottomScroll=false,this.category = '',this.isSearch =false, this.keyword='',  });
 
   final int? page;
+  final String? category;
+  final bool? isSearch;
+  final String? keyword;
   final bool isBottomScroll;
 
   @override

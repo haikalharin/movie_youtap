@@ -5,6 +5,7 @@ import 'package:formz/formz.dart';
 import 'package:intl/intl.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+
 import '../../common/configurations/configurations.dart';
 import '../../common/injector/injector.dart';
 import '../../data/model/article_model/article_model.dart';
@@ -26,26 +27,37 @@ class ListArticleVertical extends StatefulWidget {
 }
 
 class _ListArticleVerticalState extends State<ListArticleVertical> {
+  final TextEditingController _searchTextController = TextEditingController();
   final GlobalKey<LiquidPullToRefreshState> _refreshIndicatorKey =
-      GlobalKey<LiquidPullToRefreshState>();
+  GlobalKey<LiquidPullToRefreshState>();
+  String _category = '';
+  bool _isSearch = false;
+  bool _isGetData = false;
+  List<ArticleModel> _listMovie = [];
+
   Future<void> _handleRefresh() async {
     if (widget.isSearch == false) {
-      Injector.resolve<ArticlePageBloc>().add(ArticleFetchEvent(page: 1));
+      Injector.resolve<ArticlePageBloc>()
+          .add(
+          ArticleFetchEvent(page: 1, category: _category, isSearch: false));
     }
   }
 
   @override
   void initState() {
+    _category = widget.category ?? '';
+    _isSearch = widget.isSearch ?? false;
+    _isGetData = widget.isSearch == true ? false : true;
     if (widget.isSearch == false) {
-      Injector.resolve<ArticlePageBloc>().add(ArticleFetchEvent(page: 1));
+      Injector.resolve<ArticlePageBloc>()
+          .add(
+          ArticleFetchEvent(page: 1, category: _category, isSearch: false));
     }
-
 
     super.initState();
   }
 
-  var articleBgColor = [
-    ];
+  var articleBgColor = [];
 
   // final String nextMenu, content;
   @override
@@ -54,78 +66,186 @@ class _ListArticleVerticalState extends State<ListArticleVertical> {
       listener: (context, state) {
         if (state.submitStatus == FormzStatus.submissionSuccess &&
             state.type == 'fetching-detail') {
-          Navigator.of(context).pushNamed(
-              RouteName.articleDetailPage);
+          Navigator.of(context).pushNamed(RouteName.articleDetailPage);
         }
       },
       child: BlocBuilder<ArticlePageBloc, ArticlePageState>(
         builder: (context, state) {
+          if (_isGetData) {
+            _listMovie = state.listArticle ?? [];
+          }
           return Scaffold(
-            appBar: AppBar(title: Text(widget.title??''),),
-            body: Stack(
+            appBar: AppBar(
+              title: Text(
+                _category.contains('_')
+                    ? _category.replaceFirst('_', ' ')
+                    : _category,
+              ),
+            ),
+            body: Column(
               children: [
-                Container(
-                    margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                    decoration: BoxDecoration(color: Colors.white),
-                    child: state.listArticle == null
-                        ? Stack(children: [
+                _isSearch
+                    ? Container(
+                  margin: EdgeInsets.all(16.w),
+                  height: 40.h,
+                  child: TextFormField(
+                    controller: _searchTextController,
+                    textInputAction: TextInputAction.search,
+                    onFieldSubmitted: (keyWord) {
+                      setState(() {
+                        _isGetData = true;
+                      });
+
+                      Injector.resolve<ArticlePageBloc>().add(
+                          ArticleFetchEvent(
+                              page: 1,
+                              category: _category,
+                              keyword: _searchTextController.text,
+                              isSearch: true));
+                    },
+                    decoration: InputDecoration(
+                      prefixIconConstraints:
+                      BoxConstraints(maxHeight: 35, maxWidth: 35),
+                      prefixText: '',
+                      prefixIcon: Padding(
+                        padding: EdgeInsets.only(left: 8.w, right: 8.w),
+                        child: Icon(
+                          Icons.search,
+                          color: Colors.black,
+                        ),
+                      ),
+                      suffixIconConstraints:
+                      BoxConstraints(maxWidth: 40, maxHeight: 21),
+                      suffixIcon: InkWell(
+                        onTap: () {
+                          setState(() {
+                            _isGetData = true;
+                          });
+                          _searchTextController.clear();
+                          Injector.resolve<ArticlePageBloc>().add(
+                              ArticleFetchEvent(
+                                  page: 1,
+                                  category: _category,
+                                  keyword: ''));
+                          // Injector.resolve<PatientSelectBloc>().add(FetchPatientEvent(''));
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.black,
+                              shape: BoxShape.circle),
+                          child: Center(
+                            child: Icon(
+                              Icons.close,
+                              color: Colors.white,
+                              size: 12,
+                            ),
+                          ),
+                        ),
+                      ),
+                      contentPadding: EdgeInsets.only(
+                          top: 5.h, left: 20.w, right: 20.w),
+                      hintText: "Cari Nama...",
+                      fillColor: Colors.white,
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide(
+                          color: EpregnancyColors.primer,
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide(
+                          color: EpregnancyColors.borderGrey,
+                          width: 2.0,
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+                    : Container(),
+                Flexible(
+                  flex: 6,
+                  child: Stack(
+                    children: [
+                      Container(
+                          margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          decoration: BoxDecoration(color: Colors.white),
+                          child: _listMovie == null
+                              ? Stack(children: [
                             Container(
-                                margin: EdgeInsets.only(), child: Container())
+                                margin: EdgeInsets.only(),
+                                child: Container())
                           ])
-                        : state.listArticle!.isEmpty
-                            ? Container(
-                                width: MediaQuery.of(context).size.width,
-                                child: Center(
-                                    child: Text("Artikel tidak tersedia")))
-                            : Stack(
+                              : _listMovie.isEmpty
+                              ? Container(
+                              width: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width,
+                              child: Center(
+                                  child:
+                                  Text("Artikel tidak tersedia")))
+                              : Stack(
+                            children: [
+                              Column(
                                 children: [
-                                  Column(
-                                    children: [
-                                      Expanded(
-                                        child: LazyLoadScrollView(
-                                          isLoading: state.submitStatus ==
-                                                  FormzStatus
-                                                      .submissionInProgress &&
-                                              state.type ==
-                                                  "get-next-page-article",
-                                          onEndOfPage: () {
-                                            if (!state.isLast) {
-                                              if (widget.isSearch == true) {
-                                                Injector.resolve<
-                                                        ArticlePageBloc>()
-                                                    .add(ArticleFetchEvent(
-                                                        isBottomScroll: true));
-                                              } else {
-                                                Injector.resolve<
-                                                        ArticlePageBloc>()
-                                                    .add(ArticleFetchEvent(
-                                                        isBottomScroll: true));
-                                              }
-                                            }
-                                          },
-                                          child: Scrollbar(
-                                            child: LiquidPullToRefresh(
-                                                color: EpregnancyColors.primer,
-                                                key: _refreshIndicatorKey,
-                                                onRefresh: _handleRefresh,
-                                                showChildOpacityTransition:
-                                                    false,
-                                                child: _ListArticleBody()),
-                                          ),
-                                        ),
+                                  Expanded(
+                                    child: LazyLoadScrollView(
+                                      isLoading: state.submitStatus ==
+                                          FormzStatus
+                                              .submissionInProgress &&
+                                          state.type ==
+                                              "get-next-page-article",
+                                      onEndOfPage: () {
+                                        if (!state.isLast) {
+                                          if (widget.isSearch ==
+                                              true) {
+                                            Injector.resolve<
+                                                ArticlePageBloc>()
+                                                .add(ArticleFetchEvent(
+                                                isBottomScroll:
+                                                true,
+                                                category:
+                                                _category,isSearch: true,keyword: _searchTextController.text));
+                                          } else {
+                                            Injector.resolve<
+                                                ArticlePageBloc>()
+                                                .add(ArticleFetchEvent(
+                                                isBottomScroll:
+                                                true,
+                                                category:
+                                                _category));
+                                          }
+                                        }
+                                      },
+                                      child: Scrollbar(
+                                        child: LiquidPullToRefresh(
+                                            color: Colors.green,
+                                            key: _refreshIndicatorKey,
+                                            onRefresh: _handleRefresh,
+                                            showChildOpacityTransition:
+                                            false,
+                                            child:
+                                            _ListArticleBody()),
                                       ),
-                                      (state.submitStatus ==
-                                                  FormzStatus
-                                                      .submissionInProgress &&
-                                              state.type ==
-                                                  'get-next-page-article')
-                                          ? _LoadingBottom()
-                                          : Container()
-                                    ],
+                                    ),
                                   ),
+                                  (state.submitStatus ==
+                                      FormzStatus
+                                          .submissionInProgress &&
+                                      state.type ==
+                                          'get-next-page-article')
+                                      ? _LoadingBottom()
+                                      : Container(),
+                                  state.isLast?SizedBox(height: 20):Container()
                                 ],
-                              )),
-                _Loading(),
+                              ),
+                            ],
+                          )),
+                      _Loading(),
+                    ],
+                  ),
+                ),
               ],
             ),
           );
@@ -154,12 +274,15 @@ class _ListArticleBody extends StatelessWidget {
           String outputDate = "";
           var outputFormat = DateFormat.yMMMMd('id');
           outputDate = outputFormat.format(DateTime.parse(
-              state.listArticle![index].releaseDate ?? "0000-00-00"));
+              state.listArticle![index].releaseDate != null &&
+                  state.listArticle![index].releaseDate != '' ? state
+                  .listArticle![index].releaseDate ?? "0000-00-00" : "0000-00-00"));
           // 12/3
           return InkWell(
             onTap: () {
               Injector.resolve<ArticlePageBloc>()
-                  .add(ArticleReadDetailEvent( state.listArticle![index].id ?? 0));
+                  .add(
+                  ArticleReadDetailEvent(state.listArticle![index].id ?? 0));
             },
             child: Container(
               height: 300,

@@ -39,10 +39,8 @@ class ListArticleHorizontal extends StatelessWidget {
                 return InkWell(
                       onTap: () {
 
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ArticleDetailPage()));
+                        Injector.resolve<ArticlePageBloc>()
+                            .add(ArticleReadDetailEvent( listArticle![index].id ?? 0));
                       },
                       child: Container(
                         height: 150.h,
@@ -112,22 +110,6 @@ class ListArticleHorizontal extends StatelessWidget {
                                                         )),
                                                   ],
                                                 ),
-                                              ),
-                                              Container(
-                                                margin: EdgeInsets.only(top: 5),
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                    BorderRadius.circular(10.0),
-                                                    color: EpregnancyColors.primer),
-                                                height: 18,
-                                                width: 60,
-                                                child: Center(
-                                                    child: Text(
-                                                      "Berita",
-                                                      style: TextStyle(
-                                                          fontSize: 10,
-                                                          color: Colors.white),
-                                                    )),
                                               ),
                                             ],
                                           )),

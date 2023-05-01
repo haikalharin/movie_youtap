@@ -1,4 +1,5 @@
 
+import 'package:base_app_new/pages/home_page/home_page.dart';
 import 'package:base_app_new/routes/routes.dart';
 import 'package:base_app_new/utils/flavors.dart';
 import 'package:flutter/material.dart';
@@ -33,8 +34,8 @@ class MyApp extends StatelessWidget {
           providers: _getProviders(),
           child: MaterialApp(
             debugShowCheckedModeBanner: false,
-            title: 'Games',
-            home: ListArticleVertical(),
+            title: 'Movie',
+            home: HomePage(),
             // home: UkPage(UjiKelayakanModel()),
             onGenerateRoute: Routes.generateRoute,
             theme: ThemeData(
