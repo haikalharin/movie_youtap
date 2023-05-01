@@ -72,7 +72,7 @@ class ListArticleHorizontal extends StatelessWidget {
                                   children: [
                                     Container(
                                         width: 200,
-                                        height: 85,
+                                        height: 95,
                                         margin: EdgeInsets.only(),
                                         child: Text(
                                           listArticle![index].title!,
@@ -82,38 +82,52 @@ class ListArticleHorizontal extends StatelessWidget {
                                               fontWeight: FontWeight.bold,
                                               color: Colors.white),
                                         )),
-                                    Expanded(
-                                      child: Container(
-                                        margin: EdgeInsets.only(bottom: 16.h),
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Container(
-                                                child: Row(
-                                                  children: [
-                                                    Container(
-                                                        child: Icon(
-                                                          Icons.access_time,
-                                                          color: Colors.white,
-                                                          size: 12,
-                                                        )),
-                                                    SizedBox(
-                                                      width: 5,
-                                                    ),
-                                                    Container(
-                                                        child: Text(
-                                                          outputDate,
-                                                          style: TextStyle(
-                                                              fontSize: 12,
-                                                              color: Colors.white),
-                                                        )),
-                                                  ],
-                                                ),
+                                    Container(
+                                      margin: EdgeInsets.only(bottom: 16.h),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Container(
+                                              child: Row(
+                                                children: [
+                                                  Container(
+                                                      child: Icon(
+                                                        Icons.access_time,
+                                                        color: Colors.white,
+                                                        size: 12,
+                                                      )),
+                                                  SizedBox(
+                                                    width: 5,
+                                                  ),
+                                                  Container(
+                                                      child: Text(
+                                                        outputDate,
+                                                        style: TextStyle(
+                                                            fontSize: 12,
+                                                            color: Colors.white),
+                                                      )),
+                                                ],
                                               ),
-                                            ],
-                                          )),
-                                    ),
+                                            ),
+                                            Container(
+                                              margin: EdgeInsets.only(top: 12),
+                                              decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(10.0),
+                                                  color: EpregnancyColors.primer),
+                                              height: 18,
+                                              width: 100,
+                                              child: Center(
+                                                  child: Text(
+                                                    "Score: ${listArticle?[index].voteAverage ?? ''}",
+                                                    style: TextStyle(
+                                                        fontSize: 10,
+                                                        color: Colors.white,
+                                                        fontWeight: FontWeight.bold),
+                                                  )),
+                                            ),
+                                          ],
+                                        )),
                                   ])),
 
                         ),

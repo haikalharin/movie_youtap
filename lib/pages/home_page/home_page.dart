@@ -74,7 +74,7 @@ class _HomePage extends State<HomePage> {
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(
-              title: Text('Movie'),
+              title: Text('Netplix'),
               actions: <Widget>[
                 IconButton(
                   icon: Icon(Icons.search),

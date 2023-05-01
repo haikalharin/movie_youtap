@@ -62,195 +62,187 @@ class _ListArticleVerticalState extends State<ListArticleVertical> {
   // final String nextMenu, content;
   @override
   Widget build(BuildContext context) {
-    return BlocListener<ArticlePageBloc, ArticlePageState>(
-      listener: (context, state) {
-        if (state.submitStatus == FormzStatus.submissionSuccess &&
-            state.type == 'fetching-detail') {
-          Navigator.of(context).pushNamed(RouteName.articleDetailPage);
+    return BlocBuilder<ArticlePageBloc, ArticlePageState>(
+      builder: (context, state) {
+        if (_isGetData) {
+          _listMovie = state.listArticle ?? [];
         }
-      },
-      child: BlocBuilder<ArticlePageBloc, ArticlePageState>(
-        builder: (context, state) {
-          if (_isGetData) {
-            _listMovie = state.listArticle ?? [];
-          }
-          return Scaffold(
-            appBar: AppBar(
-              title: Text(
-                _category.contains('_')
-                    ? _category.replaceFirst('_', ' ')
-                    : _category,
-              ),
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(
+              _category.contains('_')
+                  ? _category.replaceFirst('_', ' ')
+                  : _category,
             ),
-            body: Column(
-              children: [
-                _isSearch
-                    ? Container(
-                  margin: EdgeInsets.all(16.w),
-                  height: 40.h,
-                  child: TextFormField(
-                    controller: _searchTextController,
-                    textInputAction: TextInputAction.search,
-                    onFieldSubmitted: (keyWord) {
-                      setState(() {
-                        _isGetData = true;
-                      });
+          ),
+          body: Column(
+            children: [
+              _isSearch
+                  ? Container(
+                margin: EdgeInsets.all(16.w),
+                height: 40.h,
+                child: TextFormField(
+                  controller: _searchTextController,
+                  textInputAction: TextInputAction.search,
+                  onFieldSubmitted: (keyWord) {
+                    setState(() {
+                      _isGetData = true;
+                    });
 
-                      Injector.resolve<ArticlePageBloc>().add(
-                          ArticleFetchEvent(
-                              page: 1,
-                              category: _category,
-                              keyword: _searchTextController.text,
-                              isSearch: true));
-                    },
-                    decoration: InputDecoration(
-                      prefixIconConstraints:
-                      BoxConstraints(maxHeight: 35, maxWidth: 35),
-                      prefixText: '',
-                      prefixIcon: Padding(
-                        padding: EdgeInsets.only(left: 8.w, right: 8.w),
-                        child: Icon(
-                          Icons.search,
-                          color: Colors.black,
-                        ),
+                    Injector.resolve<ArticlePageBloc>().add(
+                        ArticleFetchEvent(
+                            page: 1,
+                            category: _category,
+                            keyword: _searchTextController.text,
+                            isSearch: true));
+                  },
+                  decoration: InputDecoration(
+                    prefixIconConstraints:
+                    BoxConstraints(maxHeight: 35, maxWidth: 35),
+                    prefixText: '',
+                    prefixIcon: Padding(
+                      padding: EdgeInsets.only(left: 8.w, right: 8.w),
+                      child: Icon(
+                        Icons.search,
+                        color: Colors.black,
                       ),
-                      suffixIconConstraints:
-                      BoxConstraints(maxWidth: 40, maxHeight: 21),
-                      suffixIcon: InkWell(
-                        onTap: () {
-                          setState(() {
-                            _isGetData = true;
-                          });
-                          _searchTextController.clear();
-                          Injector.resolve<ArticlePageBloc>().add(
-                              ArticleFetchEvent(
-                                  page: 1,
-                                  category: _category,
-                                  keyword: ''));
-                          // Injector.resolve<PatientSelectBloc>().add(FetchPatientEvent(''));
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: Colors.black,
-                              shape: BoxShape.circle),
-                          child: Center(
-                            child: Icon(
-                              Icons.close,
-                              color: Colors.white,
-                              size: 12,
-                            ),
+                    ),
+                    suffixIconConstraints:
+                    BoxConstraints(maxWidth: 40, maxHeight: 21),
+                    suffixIcon: InkWell(
+                      onTap: () {
+                        setState(() {
+                          _isGetData = true;
+                        });
+                        _searchTextController.clear();
+                        Injector.resolve<ArticlePageBloc>().add(
+                            ArticleFetchEvent(
+                                page: 1,
+                                category: _category,
+                                keyword: ''));
+                        // Injector.resolve<PatientSelectBloc>().add(FetchPatientEvent(''));
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.black,
+                            shape: BoxShape.circle),
+                        child: Center(
+                          child: Icon(
+                            Icons.close,
+                            color: Colors.white,
+                            size: 12,
                           ),
                         ),
                       ),
-                      contentPadding: EdgeInsets.only(
-                          top: 5.h, left: 20.w, right: 20.w),
-                      hintText: "Cari Nama...",
-                      fillColor: Colors.white,
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(
-                          color: EpregnancyColors.primer,
-                        ),
+                    ),
+                    contentPadding: EdgeInsets.only(
+                        top: 5.h, left: 20.w, right: 20.w),
+                    hintText: "Cari Nama...",
+                    fillColor: Colors.white,
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(
+                        color: EpregnancyColors.primer,
                       ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(
-                          color: EpregnancyColors.borderGrey,
-                          width: 2.0,
-                        ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(
+                        color: EpregnancyColors.borderGrey,
+                        width: 2.0,
                       ),
                     ),
                   ),
-                )
-                    : Container(),
-                Flexible(
-                  flex: 6,
-                  child: Stack(
-                    children: [
-                      Container(
-                          margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                          decoration: BoxDecoration(color: Colors.white),
-                          child: _listMovie == null
-                              ? Stack(children: [
-                            Container(
-                                margin: EdgeInsets.only(),
-                                child: Container())
-                          ])
-                              : _listMovie.isEmpty
-                              ? Container(
-                              width: MediaQuery
-                                  .of(context)
-                                  .size
-                                  .width,
-                              child: Center(
-                                  child:
-                                  Text("Artikel tidak tersedia")))
-                              : Stack(
-                            children: [
-                              Column(
-                                children: [
-                                  Expanded(
-                                    child: LazyLoadScrollView(
-                                      isLoading: state.submitStatus ==
-                                          FormzStatus
-                                              .submissionInProgress &&
-                                          state.type ==
-                                              "get-next-page-article",
-                                      onEndOfPage: () {
-                                        if (!state.isLast) {
-                                          if (widget.isSearch ==
-                                              true) {
-                                            Injector.resolve<
-                                                ArticlePageBloc>()
-                                                .add(ArticleFetchEvent(
-                                                isBottomScroll:
-                                                true,
-                                                category:
-                                                _category,isSearch: true,keyword: _searchTextController.text));
-                                          } else {
-                                            Injector.resolve<
-                                                ArticlePageBloc>()
-                                                .add(ArticleFetchEvent(
-                                                isBottomScroll:
-                                                true,
-                                                category:
-                                                _category));
-                                          }
+                ),
+              )
+                  : Container(),
+              Flexible(
+                flex: 6,
+                child: Stack(
+                  children: [
+                    Container(
+                        margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                        decoration: BoxDecoration(color: Colors.white),
+                        child: _listMovie == null
+                            ? Stack(children: [
+                          Container(
+                              margin: EdgeInsets.only(),
+                              child: Container())
+                        ])
+                            : _listMovie.isEmpty
+                            ? Container(
+                            width: MediaQuery
+                                .of(context)
+                                .size
+                                .width,
+                            child: Center(
+                                child:
+                                Text("Artikel tidak tersedia")))
+                            : Stack(
+                          children: [
+                            Column(
+                              children: [
+                                Expanded(
+                                  child: LazyLoadScrollView(
+                                    isLoading: state.submitStatus ==
+                                        FormzStatus
+                                            .submissionInProgress &&
+                                        state.type ==
+                                            "get-next-page-article",
+                                    onEndOfPage: () {
+                                      if (!state.isLast) {
+                                        if (widget.isSearch ==
+                                            true) {
+                                          Injector.resolve<
+                                              ArticlePageBloc>()
+                                              .add(ArticleFetchEvent(
+                                              isBottomScroll:
+                                              true,
+                                              category:
+                                              _category,isSearch: true,keyword: _searchTextController.text));
+                                        } else {
+                                          Injector.resolve<
+                                              ArticlePageBloc>()
+                                              .add(ArticleFetchEvent(
+                                              isBottomScroll:
+                                              true,
+                                              category:
+                                              _category));
                                         }
-                                      },
-                                      child: Scrollbar(
-                                        child: LiquidPullToRefresh(
-                                            color: Colors.green,
-                                            key: _refreshIndicatorKey,
-                                            onRefresh: _handleRefresh,
-                                            showChildOpacityTransition:
-                                            false,
-                                            child:
-                                            _ListArticleBody()),
-                                      ),
+                                      }
+                                    },
+                                    child: Scrollbar(
+                                      child: LiquidPullToRefresh(
+                                          color: Colors.green,
+                                          key: _refreshIndicatorKey,
+                                          onRefresh: _handleRefresh,
+                                          showChildOpacityTransition:
+                                          false,
+                                          child:
+                                          _ListArticleBody()),
                                     ),
                                   ),
-                                  (state.submitStatus ==
-                                      FormzStatus
-                                          .submissionInProgress &&
-                                      state.type ==
-                                          'get-next-page-article')
-                                      ? _LoadingBottom()
-                                      : Container(),
-                                  state.isLast?SizedBox(height: 20):Container()
-                                ],
-                              ),
-                            ],
-                          )),
-                      _Loading(),
-                    ],
-                  ),
+                                ),
+                                (state.submitStatus ==
+                                    FormzStatus
+                                        .submissionInProgress &&
+                                    state.type ==
+                                        'get-next-page-article')
+                                    ? _LoadingBottom()
+                                    : Container(),
+                                state.isLast?SizedBox(height: 20):Container()
+                              ],
+                            ),
+                          ],
+                        )),
+                    _Loading(),
+                  ],
                 ),
-              ],
-            ),
-          );
-        },
-      ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
@@ -305,10 +297,10 @@ class _ListArticleBody extends StatelessWidget {
                 color: Colors.black26,
               ),
               // color: Colors.greenAccent,
-              margin: EdgeInsets.only(left: 20, right: 20,top: 20),
+              margin: EdgeInsets.only(left: 10, right: 10,top: 20),
               child: Container(
                 padding: EdgeInsets.only(
-                    left: 20, top: 20, bottom: 30),
+                    left: 12, top: 20, bottom: 30),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.0),
                     color: EpregnancyColors.primer.withAlpha(110)),
@@ -318,7 +310,7 @@ class _ListArticleBody extends StatelessWidget {
                         children: [
                       Expanded(
                         child: Container(
-                            width: 80.w,
+                            width: 120.w,
                             margin: EdgeInsets.only(),
                             child: Text(
                               state.listArticle?[index].title ?? '',

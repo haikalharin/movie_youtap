@@ -186,7 +186,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                       width: 120,
                       child: Center(
                           child: Text(
-                            "Rating : ${state.articleDetailModel?.voteAverage?.round()?? '0.0'}/10",
+                            "Rating : ${state.articleDetailModel?.voteAverage?.toStringAsFixed(1)}/10",
                         style: TextStyle(
                             fontSize: 14,
                             color: Colors.white,
@@ -314,7 +314,7 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   final Widget _widget;
 
   @override
-  double get minExtent => 120.h;
+  double get minExtent => 180.h;
 
   @override
   double get maxExtent => 180.h;
