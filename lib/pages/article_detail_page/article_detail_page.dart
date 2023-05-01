@@ -9,7 +9,7 @@ import 'package:intl/intl.dart';
 
 
 import '../../utils/epragnancy_color.dart';
-import '../first_page/bloc/article_bloc.dart';
+import '../list_article_page/bloc/article_bloc.dart';
 
 class ArticleDetailPage extends StatefulWidget {
 

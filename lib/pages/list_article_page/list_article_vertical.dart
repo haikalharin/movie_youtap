@@ -5,11 +5,11 @@ import 'package:formz/formz.dart';
 import 'package:intl/intl.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+import '../../common/configurations/configurations.dart';
 import '../../common/injector/injector.dart';
 import '../../data/model/article_model/article_model.dart';
 import '../../routes/route_name.dart';
 import '../../utils/epragnancy_color.dart';
-import '../second_page/article_detail_page.dart';
 import 'bloc/article_bloc.dart';
 
 class ListArticleVertical extends StatefulWidget {
@@ -54,7 +54,7 @@ class _ListArticleVerticalState extends State<ListArticleVertical> {
         if (state.submitStatus == FormzStatus.submissionSuccess &&
             state.type == 'fetching-detail') {
           Navigator.of(context).pushNamed(
-              RouteName.secondPage);
+              RouteName.articleDetailPage);
         }
       },
       child: BlocBuilder<ArticlePageBloc, ArticlePageState>(
@@ -153,7 +153,7 @@ class _ListArticleBody extends StatelessWidget {
           String outputDate = "";
           var outputFormat = DateFormat.yMMMMd('id');
           outputDate = outputFormat.format(DateTime.parse(
-              state.listArticle![index].released ?? "0000-00-00"));
+              state.listArticle![index].releaseDate ?? "0000-00-00"));
           // 12/3
           return InkWell(
             onTap: () {
@@ -165,10 +165,10 @@ class _ListArticleBody extends StatelessWidget {
               // padding: EdgeInsets.,
               decoration: BoxDecoration(
                 image: state.listArticle != null &&
-                        state.listArticle![index].backgroundImage != null
+                        state.listArticle![index].posterPath != null
                     ? DecorationImage(
                         image: NetworkImage(
-                            state.listArticle![index].backgroundImage!),
+                            "${Configurations.imageUrl}${state.listArticle![index].posterPath!}"),
                         fit: BoxFit.cover,
                       )
                     : DecorationImage(
@@ -197,7 +197,7 @@ class _ListArticleBody extends StatelessWidget {
                             width: 80.w,
                             margin: EdgeInsets.only(),
                             child: Text(
-                              state.listArticle?[index].name ?? '',
+                              state.listArticle?[index].title ?? '',
                               style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -239,7 +239,7 @@ class _ListArticleBody extends StatelessWidget {
                             width: 100,
                             child: Center(
                                 child: Text(
-                              "Score: ${ state.listArticle?[index].metacritic ?? ''}",
+                              "Score: ${ state.listArticle?[index].voteAverage ?? ''}",
                               style: TextStyle(
                                   fontSize: 10,
                                   color: Colors.white,

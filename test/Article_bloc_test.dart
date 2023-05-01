@@ -2,7 +2,7 @@ import 'package:base_app_new/data/model/article_detail_model/article_detail_mode
 import 'package:base_app_new/data/model/article_model/article_model.dart';
 import 'package:base_app_new/data/model/response_model/response_model.dart';
 import 'package:base_app_new/data/repository/article_repository/article_repository.dart';
-import 'package:base_app_new/pages/first_page/bloc/article_bloc.dart';
+import 'package:base_app_new/pages/list_article_page/bloc/article_bloc.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:formz/formz.dart';
@@ -11,9 +11,9 @@ import 'package:mockito/mockito.dart';
 var dataException = null;
 
 var dataArticle = ArticleModel(id: 437049,
-    slug: "fifa-21",
-    name: "FIFA 21",
-    released: "2022-09-12");
+    title: "fifa-21",
+    originalTitle: "FIFA 21",
+    releaseDate: "2022-09-12");
 var listData = ResponseModel(
     count: 237,
     next:

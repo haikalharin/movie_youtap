@@ -1,11 +1,11 @@
 
-import 'package:base_app_new/pages/first_page/bloc/article_bloc.dart';
 import 'package:kiwi/kiwi.dart';
 
 import '../../data/datasource/remote_datasource.dart';
 
 import '../../data/repository/article_repository/article_repository.dart';
 import '../../data/repository/article_repository/article_repository_impl.dart';
+import '../../pages/list_article_page/bloc/article_bloc.dart';
 import '../network/http/http_client.dart';
 import '../network/network_info.dart';
 

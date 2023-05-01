@@ -7,6 +7,7 @@ class ResponseModel<T> {
   String? action;
   int? total;
   int? perPage;
+  int? page;
   int? currentPage;
   int? lastPage;
   int? from;
@@ -20,6 +21,7 @@ class ResponseModel<T> {
     this.action,
     this.total,
     this.perPage,
+    this.page,
     this.currentPage,
     this.lastPage,
     this.from,
@@ -42,6 +44,7 @@ class ResponseModel<T> {
 
     total = json['total'];
     perPage = json['per_page'];
+    page = json['page'];
     currentPage = json['current_page'];
     lastPage = json['last_page'];
     from = json['from'];
@@ -57,6 +60,7 @@ class ResponseModel<T> {
     dynamic results,
     int? total,
     int? perPage,
+    int? page,
     int? currentPage,
     int? lastPage,
     int? from,
@@ -71,6 +75,7 @@ class ResponseModel<T> {
       results: results ?? this.results,
       total: total ?? this.total,
       perPage: perPage ?? this.perPage,
+      page: page ?? this.page,
       currentPage: currentPage ?? this.currentPage,
       lastPage: lastPage ?? this.lastPage,
       from: from ?? this.from,
@@ -85,6 +90,7 @@ class ResponseModel<T> {
   static ResponseModel resultsEmpty({dynamic results}) {
     return ResponseModel(
      count: 0,
+      page: 0,
       next: '',
       previous: '',
       results: results,

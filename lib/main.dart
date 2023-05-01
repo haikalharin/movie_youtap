@@ -1,5 +1,4 @@
-import 'package:base_app_new/pages/first_page/bloc/article_bloc.dart';
-import 'package:base_app_new/pages/first_page/list_article_vertical.dart';
+
 import 'package:base_app_new/routes/routes.dart';
 import 'package:base_app_new/utils/flavors.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +10,8 @@ import 'common/injector/injector_config.dart';
 import 'env.dart' as config;
 
 import 'common/configurations/configurations.dart';
+import 'pages/list_article_page/bloc/article_bloc.dart';
+import 'pages/list_article_page/list_article_vertical.dart';
 
 Future<void> main() async {
   InjectorConfig.setup();
