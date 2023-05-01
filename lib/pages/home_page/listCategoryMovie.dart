@@ -60,7 +60,7 @@ class ListCategoryMovie extends StatelessWidget {
                           Container(
                               margin: EdgeInsets.only(right: 5),
                               child: Text(
-                                "Artikel lainnya",
+                                "More",
                                 style: TextStyle(
                                     fontSize: 12,
                                     fontWeight: FontWeight.w500,
