@@ -184,6 +184,7 @@ class ArticlePageBloc extends Bloc<ArticlePageEvent, ArticlePageState> {
         yield state.copyWith(
             submitStatus: FormzStatus.submissionSuccess,
             listWatchVideo: response.results,
+            idMovie: response.id??0,
             type: 'fetching-video');
       } else {
         yield state.copyWith(

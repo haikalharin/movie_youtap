@@ -49,7 +49,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
               Navigator.of(context).pushNamed(
                   RouteName.watchVideoPreview,
                   arguments: {"movie": state.listWatchVideo});
-            }else if (state.submitStatus == FormzStatus.submissionSuccess &&
+            }else if (state.submitStatus == FormzStatus.submissionFailure &&
             state.type == 'fetching-video') {
               var snackBar = SnackBar(
                   content: Text("video tidak tersedia"),
@@ -79,7 +79,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                             leading: GestureDetector(
                               child: const Icon(
                                 Icons.arrow_back_ios,
-                                color: Colors.grey,
+                                color: Colors.redAccent,
                               ),
                               onTap: () {
                                 Navigator.pop(context);
@@ -91,9 +91,15 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                               title: Container(),
                               background: InkWell(
                                 onTap: () {
-                                  Injector.resolve<ArticlePageBloc>().add(
-                                      ArticleVideoDetailEvent(
-                                          state.articleDetailModel?.id ?? 0));
+                                  if(state.listWatchVideo!= null && state.listWatchVideo!.isNotEmpty&& state.idMovie ==state.articleDetailModel?.id){
+                                    Navigator.of(context).pushNamed(
+                                        RouteName.watchVideoPreview,
+                                        arguments: {"movie": state.listWatchVideo});
+                                  } else {
+                                    Injector.resolve<ArticlePageBloc>().add(
+                                        ArticleVideoDetailEvent(
+                                            state.articleDetailModel?.id ?? 0));
+                                  }
                                 },
                                 child: Stack(fit: StackFit.expand,
                                   children: [

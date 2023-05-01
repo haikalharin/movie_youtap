@@ -11,6 +11,7 @@ class ArticlePageState extends Equatable with FormzMixin {
   final FormzStatus? submitStatus;
   final String? errorMessage;
   final String? type;
+  final int? idMovie;
   final bool? isSearch;
   final bool isLast;
   final int page;
@@ -25,6 +26,7 @@ class ArticlePageState extends Equatable with FormzMixin {
     this.articleDetailModel,
     this.listArticle,
     this.type,
+    this.idMovie,
     this.listWatchVideo,
     this.isSearch = false,
     this.submitStatus = FormzStatus.pure,
@@ -48,6 +50,7 @@ class ArticlePageState extends Equatable with FormzMixin {
       String? type,
       bool? isLast,
       int? page,
+      int? idMovie,
       String? keyword,
       String? next,
       String? errorMessage}) {
@@ -61,6 +64,7 @@ class ArticlePageState extends Equatable with FormzMixin {
         listArticleTopRated: listArticleTopRated ?? this.listArticleTopRated,
         listWatchVideo: listWatchVideo,
         isSearch: isSearch ?? this.isSearch,
+        idMovie: idMovie ?? this.idMovie,
         type: type,
         isLast: isLast ?? this.isLast,
         page: page ?? this.page,
