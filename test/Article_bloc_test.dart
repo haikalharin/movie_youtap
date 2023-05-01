@@ -40,7 +40,8 @@ class ArticleMockRepository extends Mock implements ArticleRepository {
   }
 
   @override
-  Future<ResponseModel> fetchArticle(int page, String start, String end,String category,String keyword, bool isSearch) async {
+  Future<ResponseModel> fetchArticle(int page, String start, String end,
+      String category,String keyword, bool isSearch) async {
     return listData;
   }
 }

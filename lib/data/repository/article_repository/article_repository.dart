@@ -10,4 +10,6 @@ abstract class ArticleRepository {
   Future<ArticleDetailModel> readDetailArticle(int id);
 
   Future<ResponseModel> readDetailVideoArticle(int id);
+
+  Future<ResponseModel> readRecommendationsMovieArticle(int id,int page);
 }

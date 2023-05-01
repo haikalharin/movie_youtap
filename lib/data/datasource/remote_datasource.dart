@@ -75,4 +75,20 @@ class RemoteDataSource {
       return ResponseModel.resultsEmpty();
     }
   }
+
+  Future<ResponseModel> readRecommendationsMovieArticle(int id,int page) async {
+    try {
+      Map<String, String> qParams = {
+        'language':'en-US',
+        'page':page.toString(),
+        'api_key': Configurations.key,
+      };
+      final response = await httpClient.get(
+          "${ServiceUrl.movie}/$id/${ServiceUrl.recommendations}",queryParameters: qParams);
+      var data = ResponseModel.fromJson(response,ArticleModel.fromJson);
+      return data;
+    } catch (e) {
+      return ResponseModel.resultsEmpty();
+    }
+  }
 }

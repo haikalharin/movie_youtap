@@ -11,13 +11,21 @@ abstract class ArticlePageEvent extends Equatable {
 enum SortEnum { asc, desc }
 
 class ArticleFetchEvent extends ArticlePageEvent {
-  const ArticleFetchEvent({this.page = 0,this.isBottomScroll=false,this.category = '',this.isSearch =false, this.keyword='',  });
+  const ArticleFetchEvent({
+    this.page = 0,
+    this.isBottomScroll = false,
+    this.category = '',
+    this.isSearch = false,
+    this.isRefresh = false,
+    this.keyword = '',
+  });
 
   final int? page;
   final String? category;
   final bool? isSearch;
   final String? keyword;
   final bool isBottomScroll;
+  final bool isRefresh;
 
   @override
   List<Object> get props => [];
@@ -33,14 +41,28 @@ class ArticleReadDetailEvent extends ArticlePageEvent {
 
 class ArticleVideoDetailEvent extends ArticlePageEvent {
   const ArticleVideoDetailEvent(this.id);
+
   final int id;
 
   @override
   List<Object> get props => [id];
 }
 
-class ArticleBackEvent extends ArticlePageEvent {
-  const ArticleBackEvent();
+class ReadRecommendationsMovieArticle extends ArticlePageEvent {
+  const ReadRecommendationsMovieArticle(this.id,
+      {this.page = 0, this.isRefresh =false,this.isBottomScroll = false});
+
+  final int id;
+  final int? page;
+  final bool isBottomScroll;
+  final bool isRefresh;
+
+  @override
+  List<Object> get props => [id];
+}
+
+class ArticleDisposeEvent extends ArticlePageEvent {
+  const ArticleDisposeEvent();
 
   @override
   List<Object> get props => [];

@@ -9,13 +9,16 @@ import 'package:formz/formz.dart';
 import 'package:intl/intl.dart';
 
 import '../../common/configurations/configurations.dart';
+import '../../common/constants/string_constants.dart';
 import '../../common/injector/injector.dart';
 import '../../routes/route_name.dart';
 import '../../utils/epragnancy_color.dart';
+import '../home_page/listCategoryMovie.dart';
 import '../list_article_page/bloc/article_bloc.dart';
 
 class ArticleDetailPage extends StatefulWidget {
-  ArticleDetailPage();
+  ArticleDetailPage(this.id);
+  final int id;
 
   @override
   State<ArticleDetailPage> createState() => _ArticleDetailPageState();
@@ -30,7 +33,8 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
   ];
   @override
   void initState() {
-
+    Injector.resolve<ArticlePageBloc>()
+        .add(ReadRecommendationsMovieArticle(widget.id,page: 1));
     super.initState();
   }
 
@@ -140,17 +144,28 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                       children: [
                         Expanded(
                           child: SingleChildScrollView(
-                              child: Container(
-                                  padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
-                                  child: Html(
-                                      data:
-                                          state.articleDetailModel?.overview ??
-                                              '',
-                                      style: {
-                                        "body": Style(
-                                            fontSize: FontSize(16.0),
-                                            color: Colors.black),
-                                      })),
+                              child: Column(
+                                children: [
+                                  Container(
+                                      padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+                                      child: Html(
+                                          data:
+                                              state.articleDetailModel?.overview ??
+                                                  '',
+                                          style: {
+                                            "body": Style(
+                                                fontSize: FontSize(16.0),
+                                                color: Colors.black),
+                                          })),
+                                  ListCategoryMovie(
+                                    category: CategoryConstans
+                                        .recommendations,
+                                    listArticle: state
+                                        .listArticleRecommendations,
+                                  ),
+                                  SizedBox(height: 24,)
+                                ],
+                              ),
                             ),
                           ),
                         ],

@@ -1,3 +1,4 @@
+import 'package:base_app_new/common/constants/string_constants.dart';
 import 'package:base_app_new/pages/list_article_page/bloc/article_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -36,11 +37,22 @@ class ListCategoryMovie extends StatelessWidget {
                   )),
                   InkWell(
                     onTap: () {
-                      Navigator.of(context).pushNamed(RouteName.listArticlePage,
-                          arguments: {
-                            "category_movie": category,
-                            "is_search": false
-                          });
+                      if(category == CategoryConstans.recommendations){
+                        Navigator.of(context).pushNamed(
+                            RouteName.listArticleRecommendPage,
+                            arguments: {
+                              "movie": state.articleDetailModel,
+                              "category_movie": category,
+                              "is_search": false,
+                            });
+                      }else {
+                        Navigator.of(context).pushNamed(
+                            RouteName.listArticlePage,
+                            arguments: {
+                              "category_movie": category,
+                              "is_search": false
+                            });
+                      }
                     },
                     child: Container(
                       child: Row(

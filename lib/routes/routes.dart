@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../pages/article_detail_page/article_detail_page.dart';
+import '../pages/list_article_page/list_article_recommend_vertical.dart';
 import '../pages/list_article_page/list_article_vertical.dart';
 import '../utils/remote_utils.dart';
 
@@ -16,9 +17,16 @@ class Routes {
                   category: getCatagoryMovie(settings.arguments),
                   isSearch: isSearchMovie(settings.arguments),
                 ));
+      case RouteName.listArticleRecommendPage:
+        return MaterialPageRoute(
+            builder: (_) => ListArticleRecommendVertical(
+              category: getCatagoryMovie(settings.arguments),
+              isSearch: isSearchMovie(settings.arguments),
+              articleDetailModel: getMovie(settings.arguments),
+            ));
       case RouteName.articleDetailPage:
         return MaterialPageRoute(
-            builder: (_) => ArticleDetailPage());
+            builder: (_) => ArticleDetailPage(getDataValue(settings.arguments)));
       case RouteName.watchVideoPreview:
         return MaterialPageRoute(
             builder: (_) =>

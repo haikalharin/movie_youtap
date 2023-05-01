@@ -8,6 +8,7 @@ class ServiceUrl {
 
   static String movie = 'movie';
   static String videos = 'videos';
+  static String recommendations = 'recommendations';
   static String moviePopular = '$movie/popular';
 
 

@@ -67,7 +67,7 @@ class _HomePage extends State<HomePage> {
         if (state.submitStatus == FormzStatus.submissionSuccess &&
             state.type == 'fetching-detail') {
           Navigator.of(context).pushNamed(
-              RouteName.articleDetailPage);
+              RouteName.articleDetailPage,arguments: state.articleDetailModel?.id);
         }
       },
       child: BlocBuilder<ArticlePageBloc, ArticlePageState>(

@@ -30,7 +30,7 @@ class _WatchVideoScreenState extends State<WatchVideoScreen> {
     _controller = YoutubePlayerController(
       initialVideoId: _videos[0].key??'',
       flags: YoutubePlayerFlags(
-        autoPlay: true,
+        autoPlay: false,
         mute: false,
       ),
     );

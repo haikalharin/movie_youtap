@@ -72,7 +72,7 @@ class ListArticleHorizontal extends StatelessWidget {
                                   children: [
                                     Container(
                                         width: 200,
-                                        height: 95,
+                                        height: 70.h,
                                         margin: EdgeInsets.only(),
                                         child: Text(
                                           listArticle![index].title!,

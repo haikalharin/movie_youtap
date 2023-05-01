@@ -28,27 +28,37 @@ class ArticlePageBloc extends Bloc<ArticlePageEvent, ArticlePageState> {
       yield* _mapArticleFetchEventToState(event, state);
     } else if (event is ArticleReadDetailEvent) {
       yield* _mapArticleReadEventToState(event, state);
-    }else if (event is ArticleVideoDetailEvent) {
+    } else if (event is ArticleVideoDetailEvent) {
       yield* _mapArticleVideoDetailEventToState(event, state);
-    } else if (event is ArticleBackEvent) {
-      yield _mapArticleBackEventToState(event, state);
+    } else if (event is ReadRecommendationsMovieArticle) {
+      yield* _mapReadRecommendationsMovieArticleToState(event, state);
+    } else if (event is ArticleDisposeEvent) {
+      yield _mapArticleDisposeEventToState(event, state);
     }
   }
 
-  ArticlePageState _mapArticleBackEventToState(
-    ArticleBackEvent event,
+  ArticlePageState _mapArticleDisposeEventToState(
+    ArticleDisposeEvent event,
     ArticlePageState state,
   ) {
-    return state.copyWith(
-      isSearch: false,
-    );
+    return ArticlePageState(
+      submitStatus: state.submitStatus,
+        type: state.type,
+        listArticlePopular: state.listArticlePopular,
+        listArticleNowPlaying: state.listArticleNowPlaying,
+        listArticleUpcoming: state.listArticleUpcoming,
+    listArticleTopRated: state.listArticleTopRated,
+    listArticleRecommendations: state.listArticleRecommendations,
+        articleDetailModel: state.articleDetailModel,
+        listWatchVideo: state.listWatchVideo,
+        idMovie: state.idMovie);
   }
 
   Stream<ArticlePageState> _mapArticleFetchEventToState(
     ArticleFetchEvent event,
     ArticlePageState state,
   ) async* {
-    if(event.isBottomScroll){
+    if (event.isBottomScroll) {
       yield state.copyWith(
           submitStatus: FormzStatus.submissionInProgress,
           type: 'get-next-page-article');
@@ -82,8 +92,12 @@ class ArticlePageBloc extends Bloc<ArticlePageEvent, ArticlePageState> {
           data = response.results;
         }
         next = response.next ?? '';
-        if (response.totalPage! > state.page) {
-          page = state.page + 1;
+        if (response.totalPage! > page) {
+          if(event.isRefresh){
+            page = event.page!+1;
+          } else {
+            page = state.page + 1;
+          }
         } else {
           isLast = true;
         }
@@ -124,7 +138,16 @@ class ArticlePageBloc extends Bloc<ArticlePageEvent, ArticlePageState> {
             isLast: isLast,
             next: next,
             type: 'fetching-article');
-      }  else if (event.category == CategoryConstans.search) {
+      } else if (event.category == CategoryConstans.recommendations) {
+        yield state.copyWith(
+            submitStatus: FormzStatus.submissionSuccess,
+            listArticleRecommendations: data,
+            listArticle: data,
+            page: page,
+            isLast: isLast,
+            next: next,
+            type: 'fetching-article');
+      } else if (event.category == CategoryConstans.search) {
         yield state.copyWith(
             submitStatus: FormzStatus.submissionSuccess,
             listArticle: data,
@@ -190,6 +213,65 @@ class ArticlePageBloc extends Bloc<ArticlePageEvent, ArticlePageState> {
         yield state.copyWith(
             submitStatus: FormzStatus.submissionFailure,
             type: 'fetching-video');
+      }
+    } on ArticleErrorException catch (e) {
+      print(e);
+      yield state.copyWith(submitStatus: FormzStatus.submissionFailure);
+    } on Exception catch (a) {}
+  }
+
+//
+  Stream<ArticlePageState> _mapReadRecommendationsMovieArticleToState(
+    ReadRecommendationsMovieArticle event,
+    ArticlePageState state,
+  ) async* {
+    if (event.isBottomScroll) {
+      yield state.copyWith(
+          submitStatus: FormzStatus.submissionInProgress,
+          type: 'get-next-page-article');
+    }
+
+    try {
+      List<ArticleModel> data = [];
+      bool isLast = false;
+      int? page = state.page;
+      if (event.page != 0) {
+        page = event.page ?? 1;
+      }
+
+      ResponseModel response = await articleRepository
+          .readRecommendationsMovieArticle(event.id, page);
+
+      if (response.results != null) {
+        if (state.listArticle != null && event.page != 1) {
+          data = state.listArticle ?? [];
+          data.addAll(response.results);
+        } else {
+          data = response.results;
+        }
+        if (response.totalPage! > page ) {
+          if(event.isRefresh){
+            page = event.page!+1;
+          } else {
+            page = state.page + 1;
+          }
+        } else {
+          isLast = true;
+        }
+      }
+      if (response.results != null && response.results != []) {
+        yield state.copyWith(
+            submitStatus: FormzStatus.submissionSuccess,
+            listArticleRecommendations: data,
+            listArticle: data,
+            idMovie: response.id ?? 0,
+            page: page,
+            isLast: isLast,
+            type: 'fetching-article');
+      } else {
+        yield state.copyWith(
+            submitStatus: FormzStatus.submissionFailure,
+            type: 'fetching-article');
       }
     } on ArticleErrorException catch (e) {
       print(e);

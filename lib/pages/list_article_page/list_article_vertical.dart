@@ -39,7 +39,7 @@ class _ListArticleVerticalState extends State<ListArticleVertical> {
     if (widget.isSearch == false) {
       Injector.resolve<ArticlePageBloc>()
           .add(
-          ArticleFetchEvent(page: 1, category: _category, isSearch: false));
+          ArticleFetchEvent(page: 1, category: _category,isRefresh: true, isSearch: false));
     }
   }
 
@@ -48,13 +48,15 @@ class _ListArticleVerticalState extends State<ListArticleVertical> {
     _category = widget.category ?? '';
     _isSearch = widget.isSearch ?? false;
     _isGetData = widget.isSearch == true ? false : true;
-    if (widget.isSearch == false) {
-      Injector.resolve<ArticlePageBloc>()
-          .add(
-          ArticleFetchEvent(page: 1, category: _category, isSearch: false));
-    }
+    _handleRefresh();
 
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    // Injector.resolve<ArticlePageBloc>().add(ArticleDisposeEvent());
+    super.dispose();
   }
 
   var articleBgColor = [];
@@ -235,7 +237,7 @@ class _ListArticleVerticalState extends State<ListArticleVertical> {
                             ),
                           ],
                         )),
-                    _Loading(),
+                    _Loading(_category),
                   ],
                 ),
               ),
@@ -397,12 +399,14 @@ class _LoadingBottom extends StatelessWidget {
 }
 
 class _Loading extends StatelessWidget {
+  _Loading(this.category);
+  String? category;
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ArticlePageBloc, ArticlePageState>(
         builder: (context, state) {
       if (state.submitStatus == FormzStatus.submissionInProgress &&
-          state.type == 'fetching-article') {
+          state.type == 'fetching-article-$category') {
         return Container(
             color: Colors.white.withAlpha(90),
             child: Center(child: CircularProgressIndicator()));

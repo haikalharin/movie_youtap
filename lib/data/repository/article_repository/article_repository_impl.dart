@@ -33,5 +33,10 @@ class ArticleRepositoryImpl extends ArticleRepository {
     return remoteDatasource.readDetailVideoArticle(id);
 
   }
+@override
+  Future<ResponseModel> readRecommendationsMovieArticle(int id,int page) async {
+    return remoteDatasource.readRecommendationsMovieArticle(id,page);
+
+  }
 
 }
