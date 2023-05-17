@@ -1,12 +1,12 @@
-import 'package:base_app_new/data/model/article_detail_model/article_detail_model.dart';
-import 'package:base_app_new/data/model/article_model/article_model.dart';
-import 'package:base_app_new/data/model/response_model/response_model.dart';
-import 'package:base_app_new/data/repository/article_repository/article_repository.dart';
-import 'package:base_app_new/pages/list_article_page/bloc/article_bloc.dart';
+import 'package:netplix/data/model/article_detail_model/article_detail_model.dart';
+import 'package:netplix/data/model/article_model/article_model.dart';
+import 'package:netplix/data/model/response_model/response_model.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:formz/formz.dart';
 import 'package:mockito/mockito.dart';
+import 'package:netplix/data/repository/article_repository/article_repository.dart';
+import 'package:netplix/pages/list_article_page/bloc/article_bloc.dart';
 
 var dataException = null;
 

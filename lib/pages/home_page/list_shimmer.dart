@@ -1,10 +1,10 @@
 
-import 'package:base_app_new/data/model/article_model/article_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../data/model/article_model/article_model.dart';
 import '../../utils/epragnancy_color.dart';
 
 class ListShimmer extends StatelessWidget {

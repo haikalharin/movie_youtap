@@ -1,19 +1,20 @@
-import 'package:base_app_new/common/constants/string_constants.dart';
-import 'package:base_app_new/pages/list_article_page/bloc/article_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 
+import '../../common/constants/string_constants.dart';
 import '../../data/model/article_model/article_model.dart';
 import '../../routes/route_name.dart';
+import '../list_article_page/bloc/article_bloc.dart';
 import 'list_article_horizontal.dart';
 import 'list_shimmer.dart';
 
 class ListCategoryMovie extends StatelessWidget {
-  const ListCategoryMovie({Key? key, this.category, this.listArticle})
+  const ListCategoryMovie({Key? key, this.category,this.isMovie = true, this.listArticle})
       : super(key: key);
   final String? category;
+  final bool? isMovie;
   final List<ArticleModel>? listArticle;
 
   @override
@@ -31,7 +32,7 @@ class ListCategoryMovie extends StatelessWidget {
                   Container(
                       child: Text(
                     category!.contains('_')
-                        ? category!.replaceFirst('_', ' ')
+                        ? category!.replaceAll('_', ' ')
                         : category ?? '',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
                   )),
@@ -44,13 +45,15 @@ class ListCategoryMovie extends StatelessWidget {
                               "movie": state.articleDetailModel,
                               "category_movie": category,
                               "is_search": false,
+                              "is_movie": isMovie,
                             });
                       }else {
                         Navigator.of(context).pushNamed(
                             RouteName.listArticlePage,
                             arguments: {
                               "category_movie": category,
-                              "is_search": false
+                              "is_search": false,
+                              "is_movie": isMovie,
                             });
                       }
                     },
@@ -87,7 +90,7 @@ class ListCategoryMovie extends StatelessWidget {
                     ? Expanded(child: ListShimmer())
                     : Expanded(
                         child: ListArticleHorizontal(
-                        listArticle: listArticle ?? [],
+                        listArticle: listArticle ?? [],isMovie: isMovie,
                       ))
               ],
             ),

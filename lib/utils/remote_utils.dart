@@ -10,4 +10,8 @@ dynamic getCatagoryMovie(dynamic result) => result['category_movie'];
 
 dynamic isSearchMovie(dynamic result) => result['is_search'];
 
+dynamic isMovie(dynamic result) => result['is_movie'];
+
+dynamic getId(dynamic result) => result['id'];
+
 

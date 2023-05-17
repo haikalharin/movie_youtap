@@ -9,10 +9,11 @@ import '../../data/model/watch_video_model/watch_video_model.dart';
 class WatchVideoScreen extends StatefulWidget {
   const WatchVideoScreen({
     Key? key,
-    //3
+    this.isMovie,
      this.listWatchVideo,
   }) : super(key: key);
   final  List<WatchVideoModel>? listWatchVideo;
+  final bool? isMovie;
 
   @override
   State<WatchVideoScreen> createState() => _WatchVideoScreenState();
@@ -28,7 +29,7 @@ class _WatchVideoScreenState extends State<WatchVideoScreen> {
     _videos = widget.listWatchVideo??[];
     //2
     _controller = YoutubePlayerController(
-      initialVideoId: _videos[0].key??'',
+      initialVideoId: _videos.isNotEmpty?_videos[0].key??'':'',
       flags: YoutubePlayerFlags(
         autoPlay: false,
         mute: false,

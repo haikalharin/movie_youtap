@@ -6,6 +6,8 @@ class ArticlePageState extends Equatable with FormzMixin {
   final List<ArticleModel>? listArticleUpcoming;
   final List<ArticleModel>? listArticleNowPlaying;
   final List<ArticleModel>? listArticleTopRated;
+  final List<ArticleModel>? listArticleAiringToday;
+  final List<ArticleModel>? listArticleOnTheAir;
   final List<ArticleModel>? listArticleRecommendations;
   final ArticleDetailModel? articleDetailModel;
   final List<WatchVideoModel>? listWatchVideo;
@@ -24,6 +26,8 @@ class ArticlePageState extends Equatable with FormzMixin {
     this.listArticleUpcoming,
     this.listArticleNowPlaying,
     this.listArticleTopRated,
+    this.listArticleAiringToday,
+    this.listArticleOnTheAir,
     this.listArticleRecommendations,
     this.articleDetailModel,
     this.listArticle,
@@ -48,6 +52,8 @@ class ArticlePageState extends Equatable with FormzMixin {
       List<ArticleModel>? listArticleUpcoming,
       List<ArticleModel>? listArticleNowPlaying,
       List<ArticleModel>? listArticleTopRated,
+      List<ArticleModel>? listArticleAiringToday,
+      List<ArticleModel>? listArticleOnTheAir,
       List<ArticleModel>? listArticleRecommendations,
       bool? isSearch,
       String? type,
@@ -65,6 +71,8 @@ class ArticlePageState extends Equatable with FormzMixin {
         listArticleNowPlaying: listArticleNowPlaying ?? this.listArticleNowPlaying,
         listArticlePopular: listArticlePopular ?? this.listArticlePopular,
         listArticleTopRated: listArticleTopRated ?? this.listArticleTopRated,
+        listArticleAiringToday: listArticleAiringToday ?? this.listArticleAiringToday,
+        listArticleOnTheAir: listArticleOnTheAir ?? this.listArticleOnTheAir,
         listArticleRecommendations: listArticleRecommendations?? this.listArticleRecommendations,
         listWatchVideo: listWatchVideo,
         isSearch: isSearch ?? this.isSearch,

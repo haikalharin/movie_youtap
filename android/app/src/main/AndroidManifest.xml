@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.base_app_new">
+    package="com.example.netplix">
    <application
-        android:label="base_app_new"
+        android:label="netplix"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

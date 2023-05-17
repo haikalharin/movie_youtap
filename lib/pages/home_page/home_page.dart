@@ -1,9 +1,9 @@
-import 'package:base_app_new/common/constants/string_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
+import '../../common/constants/string_constants.dart';
 import '../../common/injector/injector.dart';
 import '../../data/model/article_model/article_model.dart';
 import '../../routes/route_name.dart';
@@ -17,7 +17,9 @@ class HomePage extends StatefulWidget {
   bool? isSearch = false;
 
   HomePage(
-      {this.listArticle, this.condition, this.isSearch = false});
+      {this.listArticle,
+      this.condition,
+      this.isSearch = false});
 
   @override
   State<HomePage> createState() => _HomePage();
@@ -28,30 +30,33 @@ class _HomePage extends State<HomePage> {
       GlobalKey<LiquidPullToRefreshState>();
   Future<void> _handleRefresh() async {
     if (widget.isSearch == false) {
-      Injector.resolve<ArticlePageBloc>()
-          .add(ArticleFetchEvent(page: 1, category: CategoryConstans.popular));
-      Injector.resolve<ArticlePageBloc>()
-          .add(ArticleFetchEvent(page: 1, category: CategoryConstans.now_playing));
-      Injector.resolve<ArticlePageBloc>()
-          .add(ArticleFetchEvent(page: 1, category: CategoryConstans.top_rated));
-      Injector.resolve<ArticlePageBloc>()
-          .add(ArticleFetchEvent(page: 1, category: CategoryConstans.upcoming));
+
+        Injector.resolve<ArticlePageBloc>().add(
+            ArticleFetchEvent(page: 1, category: CategoryConstans.popular));
+        Injector.resolve<ArticlePageBloc>().add(
+            ArticleFetchEvent(page: 1, category: CategoryConstans.now_playing));
+        Injector.resolve<ArticlePageBloc>().add(
+            ArticleFetchEvent(page: 1, category: CategoryConstans.top_rated));
+        Injector.resolve<ArticlePageBloc>().add(
+            ArticleFetchEvent(page: 1, category: CategoryConstans.upcoming));
+
     }
   }
 
   @override
   void initState() {
     if (widget.isSearch == false) {
-      Injector.resolve<ArticlePageBloc>()
-          .add(ArticleFetchEvent(page: 1, category: CategoryConstans.popular));
-      Injector.resolve<ArticlePageBloc>()
-          .add(ArticleFetchEvent(page: 1, category: CategoryConstans.now_playing));
-      Injector.resolve<ArticlePageBloc>()
-          .add(ArticleFetchEvent(page: 1, category: CategoryConstans.top_rated));
-      Injector.resolve<ArticlePageBloc>()
-          .add(ArticleFetchEvent(page: 1, category: CategoryConstans.upcoming));
-    }
 
+        Injector.resolve<ArticlePageBloc>().add(
+            ArticleFetchEvent(page: 1, category: CategoryConstans.popular));
+        Injector.resolve<ArticlePageBloc>().add(
+            ArticleFetchEvent(page: 1, category: CategoryConstans.now_playing));
+        Injector.resolve<ArticlePageBloc>().add(
+            ArticleFetchEvent(page: 1, category: CategoryConstans.top_rated));
+        Injector.resolve<ArticlePageBloc>().add(
+            ArticleFetchEvent(page: 1, category: CategoryConstans.upcoming));
+
+    }
 
     super.initState();
   }
@@ -67,7 +72,10 @@ class _HomePage extends State<HomePage> {
         if (state.submitStatus == FormzStatus.submissionSuccess &&
             state.type == 'fetching-detail') {
           Navigator.of(context).pushNamed(
-              RouteName.articleDetailPage,arguments: state.articleDetailModel?.id);
+              RouteName.articleDetailPage,arguments: {
+            "id": state.articleDetailModel?.id,
+            "is_movie": false,
+          });
         }
       },
       child: BlocBuilder<ArticlePageBloc, ArticlePageState>(
@@ -123,7 +131,7 @@ class _HomePage extends State<HomePage> {
                                                     listArticle: state
                                                         .listArticlePopular,
                                                   ),
-                                                  ListCategoryMovie(
+                                             ListCategoryMovie(
                                                     category: CategoryConstans
                                                         .now_playing,
                                                     listArticle: state

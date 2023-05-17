@@ -1,5 +1,5 @@
-import 'package:base_app_new/pages/article_detail_page/watch_video_screen.dart';
-import 'package:base_app_new/routes/route_name.dart';
+import 'package:netplix/pages/article_detail_page/watch_video_screen.dart';
+import 'package:netplix/routes/route_name.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -16,6 +16,7 @@ class Routes {
             builder: (_) => ListArticleVertical(
                   category: getCatagoryMovie(settings.arguments),
                   isSearch: isSearchMovie(settings.arguments),
+                  isMovie: isMovie(settings.arguments),
                 ));
       case RouteName.listArticleRecommendPage:
         return MaterialPageRoute(
@@ -23,14 +24,15 @@ class Routes {
               category: getCatagoryMovie(settings.arguments),
               isSearch: isSearchMovie(settings.arguments),
               articleDetailModel: getMovie(settings.arguments),
+              isMovie: isMovie(settings.arguments),
             ));
       case RouteName.articleDetailPage:
         return MaterialPageRoute(
-            builder: (_) => ArticleDetailPage(getDataValue(settings.arguments)));
+            builder: (_) => ArticleDetailPage(id: getId(settings.arguments), isMovie: isMovie(settings.arguments),));
       case RouteName.watchVideoPreview:
         return MaterialPageRoute(
             builder: (_) =>
-                WatchVideoScreen(listWatchVideo: getMovie(settings.arguments)));
+                WatchVideoScreen(listWatchVideo: getMovie(settings.arguments),isMovie: isMovie(settings.arguments),));
 
       default:
         return MaterialPageRoute(

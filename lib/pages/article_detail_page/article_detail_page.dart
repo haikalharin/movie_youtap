@@ -17,8 +17,10 @@ import '../home_page/listCategoryMovie.dart';
 import '../list_article_page/bloc/article_bloc.dart';
 
 class ArticleDetailPage extends StatefulWidget {
-  ArticleDetailPage(this.id);
+  ArticleDetailPage({this.id = 0, this.isMovie = true});
+
   final int id;
+  final bool isMovie;
 
   @override
   State<ArticleDetailPage> createState() => _ArticleDetailPageState();
@@ -34,7 +36,8 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
   @override
   void initState() {
     Injector.resolve<ArticlePageBloc>()
-        .add(ReadRecommendationsMovieArticle(widget.id,page: 1));
+        .add(ReadRecommendationsMovieArticle
+      (widget.id,page: 1,isMovie: widget.isMovie));
     super.initState();
   }
 
@@ -50,9 +53,23 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
           listener: (context, state) {
             if (state.submitStatus == FormzStatus.submissionSuccess &&
                 state.type == 'fetching-video') {
-              Navigator.of(context).pushNamed(
-                  RouteName.watchVideoPreview,
-                  arguments: {"movie": state.listWatchVideo});
+               if(state.listWatchVideo != null &&
+                   state.listWatchVideo!
+                       .isNotEmpty &&
+                   state.idMovie ==
+                       state.articleDetailModel
+                           ?.id) {
+                 Navigator.of(context).pushNamed(RouteName.watchVideoPreview,
+                     arguments: {
+                       "movie": state.listWatchVideo,
+                       "is_movie": widget.isMovie
+                     });
+               } else{
+                 var snackBar = SnackBar(
+                     content: Text("video tidak tersedia"),
+                     backgroundColor: Colors.red);
+                 Scaffold.of(context).showSnackBar(snackBar);
+               }
             }else if (state.submitStatus == FormzStatus.submissionFailure &&
             state.type == 'fetching-video') {
               var snackBar = SnackBar(
@@ -117,7 +134,8 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                                                   RouteName.watchVideoPreview,
                                                   arguments: {
                                                     "movie":
-                                                        state.listWatchVideo
+                                                        state.listWatchVideo,
+                                                    "is_movie": widget.isMovie
                                                   });
                                             } else {
                                               Injector.resolve<
@@ -125,7 +143,8 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                                                   .add(ArticleVideoDetailEvent(
                                                       state.articleDetailModel
                                                               ?.id ??
-                                                          0));
+                                                          0,
+                                                      isMovie: widget.isMovie));
                                             }
                                           },
                                           child: Icon(
@@ -162,6 +181,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                                         .recommendations,
                                     listArticle: state
                                         .listArticleRecommendations,
+                                    isMovie: widget.isMovie,
                                   ),
                                   SizedBox(height: 24,)
                                 ],

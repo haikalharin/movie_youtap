@@ -1,7 +1,8 @@
 
-import 'package:base_app_new/pages/home_page/home_page.dart';
-import 'package:base_app_new/routes/routes.dart';
-import 'package:base_app_new/utils/flavors.dart';
+import 'package:netplix/pages/home_page/home_page.dart';
+import 'package:netplix/pages/navbar_page/bottom_nav.dart';
+import 'package:netplix/routes/routes.dart';
+import 'package:netplix/utils/flavors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
           child: MaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'Movie',
-            home: HomePage(),
+            home: NavbarPage(initalIndex: 0),
             // home: UkPage(UjiKelayakanModel()),
             onGenerateRoute: Routes.generateRoute,
             theme: ThemeData(

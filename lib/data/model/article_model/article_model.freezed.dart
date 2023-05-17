@@ -33,6 +33,7 @@ class _$ArticleModelTearOff {
       String? posterPath,
       String? releaseDate,
       String? title,
+      String? name,
       bool? video,
       double? voteAverage,
       int? voteCount}) {
@@ -48,6 +49,7 @@ class _$ArticleModelTearOff {
       posterPath: posterPath,
       releaseDate: releaseDate,
       title: title,
+      name: name,
       video: video,
       voteAverage: voteAverage,
       voteCount: voteCount,
@@ -75,6 +77,7 @@ mixin _$ArticleModel {
   String? get posterPath => throw _privateConstructorUsedError;
   String? get releaseDate => throw _privateConstructorUsedError;
   String? get title => throw _privateConstructorUsedError;
+  String? get name => throw _privateConstructorUsedError;
   bool? get video => throw _privateConstructorUsedError;
   double? get voteAverage => throw _privateConstructorUsedError;
   int? get voteCount => throw _privateConstructorUsedError;
@@ -102,6 +105,7 @@ abstract class $ArticleModelCopyWith<$Res> {
       String? posterPath,
       String? releaseDate,
       String? title,
+      String? name,
       bool? video,
       double? voteAverage,
       int? voteCount});
@@ -128,6 +132,7 @@ class _$ArticleModelCopyWithImpl<$Res> implements $ArticleModelCopyWith<$Res> {
     Object? posterPath = freezed,
     Object? releaseDate = freezed,
     Object? title = freezed,
+    Object? name = freezed,
     Object? video = freezed,
     Object? voteAverage = freezed,
     Object? voteCount = freezed,
@@ -177,6 +182,10 @@ class _$ArticleModelCopyWithImpl<$Res> implements $ArticleModelCopyWith<$Res> {
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String?,
+      name: name == freezed
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String?,
       video: video == freezed
           ? _value.video
           : video // ignore: cast_nullable_to_non_nullable
@@ -212,6 +221,7 @@ abstract class _$ArticleModelCopyWith<$Res>
       String? posterPath,
       String? releaseDate,
       String? title,
+      String? name,
       bool? video,
       double? voteAverage,
       int? voteCount});
@@ -240,6 +250,7 @@ class __$ArticleModelCopyWithImpl<$Res> extends _$ArticleModelCopyWithImpl<$Res>
     Object? posterPath = freezed,
     Object? releaseDate = freezed,
     Object? title = freezed,
+    Object? name = freezed,
     Object? video = freezed,
     Object? voteAverage = freezed,
     Object? voteCount = freezed,
@@ -289,6 +300,10 @@ class __$ArticleModelCopyWithImpl<$Res> extends _$ArticleModelCopyWithImpl<$Res>
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String?,
+      name: name == freezed
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String?,
       video: video == freezed
           ? _value.video
           : video // ignore: cast_nullable_to_non_nullable
@@ -322,6 +337,7 @@ class _$_ArticleModel implements _ArticleModel {
       this.posterPath,
       this.releaseDate,
       this.title,
+      this.name,
       this.video,
       this.voteAverage,
       this.voteCount});
@@ -352,6 +368,8 @@ class _$_ArticleModel implements _ArticleModel {
   @override
   final String? title;
   @override
+  final String? name;
+  @override
   final bool? video;
   @override
   final double? voteAverage;
@@ -360,7 +378,7 @@ class _$_ArticleModel implements _ArticleModel {
 
   @override
   String toString() {
-    return 'ArticleModel(adult: $adult, backdropPath: $backdropPath, genreIds: $genreIds, id: $id, originalLanguage: $originalLanguage, originalTitle: $originalTitle, overview: $overview, popularity: $popularity, posterPath: $posterPath, releaseDate: $releaseDate, title: $title, video: $video, voteAverage: $voteAverage, voteCount: $voteCount)';
+    return 'ArticleModel(adult: $adult, backdropPath: $backdropPath, genreIds: $genreIds, id: $id, originalLanguage: $originalLanguage, originalTitle: $originalTitle, overview: $overview, popularity: $popularity, posterPath: $posterPath, releaseDate: $releaseDate, title: $title, name: $name, video: $video, voteAverage: $voteAverage, voteCount: $voteCount)';
   }
 
   @override
@@ -385,6 +403,7 @@ class _$_ArticleModel implements _ArticleModel {
             const DeepCollectionEquality()
                 .equals(other.releaseDate, releaseDate) &&
             const DeepCollectionEquality().equals(other.title, title) &&
+            const DeepCollectionEquality().equals(other.name, name) &&
             const DeepCollectionEquality().equals(other.video, video) &&
             const DeepCollectionEquality()
                 .equals(other.voteAverage, voteAverage) &&
@@ -405,6 +424,7 @@ class _$_ArticleModel implements _ArticleModel {
       const DeepCollectionEquality().hash(posterPath),
       const DeepCollectionEquality().hash(releaseDate),
       const DeepCollectionEquality().hash(title),
+      const DeepCollectionEquality().hash(name),
       const DeepCollectionEquality().hash(video),
       const DeepCollectionEquality().hash(voteAverage),
       const DeepCollectionEquality().hash(voteCount));
@@ -433,6 +453,7 @@ abstract class _ArticleModel implements ArticleModel {
       String? posterPath,
       String? releaseDate,
       String? title,
+      String? name,
       bool? video,
       double? voteAverage,
       int? voteCount}) = _$_ArticleModel;
@@ -462,6 +483,8 @@ abstract class _ArticleModel implements ArticleModel {
   String? get releaseDate;
   @override
   String? get title;
+  @override
+  String? get name;
   @override
   bool? get video;
   @override

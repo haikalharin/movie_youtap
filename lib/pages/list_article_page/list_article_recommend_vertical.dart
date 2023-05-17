@@ -1,4 +1,3 @@
-import 'package:base_app_new/data/model/article_detail_model/article_detail_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,6 +8,7 @@ import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
 import '../../common/configurations/configurations.dart';
 import '../../common/injector/injector.dart';
+import '../../data/model/article_detail_model/article_detail_model.dart';
 import '../../data/model/article_model/article_model.dart';
 import '../../utils/epragnancy_color.dart';
 import 'bloc/article_bloc.dart';
@@ -19,12 +19,14 @@ class ListArticleRecommendVertical extends StatefulWidget {
   String? category = '';
   String? title = '';
   bool? isSearch = false;
+  bool isMovie = true;
 
   ListArticleRecommendVertical(
       {this.listArticle,
       this.category,
       this.title,
       this.isSearch = false,
+      this.isMovie = true,
       this.articleDetailModel});
 
   @override
@@ -47,6 +49,7 @@ class _ListArticleRecommendVerticalState
       Injector.resolve<ArticlePageBloc>().add(ReadRecommendationsMovieArticle(
         widget.articleDetailModel?.id ?? 0,isRefresh: true,
         page: 1,
+          isMovie: widget.isMovie
       ));
     }
   }
@@ -205,12 +208,12 @@ class _ListArticleRecommendVerticalState
                                                       widget.articleDetailModel
                                                               ?.id ??
                                                           0, isBottomScroll: true,
-                                                      page: 1,
+                                                      page: 1,isMovie: widget.isMovie
                                                     ));
                                                   } else {
                                                     Injector.resolve<ArticlePageBloc>()
                                                         .add(
-                                                        ReadRecommendationsMovieArticle(widget.articleDetailModel?.id??0,isBottomScroll: true));
+                                                        ReadRecommendationsMovieArticle(widget.articleDetailModel?.id??0,isBottomScroll: true,isMovie: widget.isMovie));
                                                   }
                                                 }
                                               },
@@ -221,7 +224,7 @@ class _ListArticleRecommendVerticalState
                                                     onRefresh: _handleRefresh,
                                                     showChildOpacityTransition:
                                                         false,
-                                                    child: _ListArticleBody()),
+                                                    child: _ListArticleBody(isMovie: widget.isMovie,)),
                                               ),
                                             ),
                                           ),
@@ -252,7 +255,8 @@ class _ListArticleRecommendVerticalState
 }
 
 class _ListArticleBody extends StatelessWidget {
-  _ListArticleBody();
+  _ListArticleBody({this.isMovie = true});
+  bool isMovie;
 
   @override
   Widget build(BuildContext context) {
@@ -275,7 +279,7 @@ class _ListArticleBody extends StatelessWidget {
           return InkWell(
             onTap: () {
               Injector.resolve<ArticlePageBloc>().add(
-                  ArticleReadDetailEvent(state.listArticle![index].id ?? 0));
+                  ArticleReadDetailEvent(state.listArticle![index].id ?? 0,isMovie: isMovie));
             },
             child: Container(
               height: 300,

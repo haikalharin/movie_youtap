@@ -1,12 +1,12 @@
 import 'dart:async';
 
-import 'package:base_app_new/common/constants/string_constants.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 import 'package:intl/intl.dart';
 import 'package:meta/meta.dart';
 
+import '../../../common/constants/string_constants.dart';
 import '../../../common/exceptions/article_error_exception.dart';
 import '../../../data/model/article_detail_model/article_detail_model.dart';
 import '../../../data/model/article_model/article_model.dart';
@@ -27,7 +27,7 @@ class ArticlePageBloc extends Bloc<ArticlePageEvent, ArticlePageState> {
     if (event is ArticleFetchEvent) {
       yield* _mapArticleFetchEventToState(event, state);
     } else if (event is ArticleReadDetailEvent) {
-      yield* _mapArticleReadEventToState(event, state);
+      yield* _mapArticleReadDetailEventToState(event, state);
     } else if (event is ArticleVideoDetailEvent) {
       yield* _mapArticleVideoDetailEventToState(event, state);
     } else if (event is ReadRecommendationsMovieArticle) {
@@ -78,9 +78,16 @@ class ArticlePageBloc extends Bloc<ArticlePageEvent, ArticlePageState> {
       if (event.page != 0) {
         page = event.page ?? 1;
       }
-
-      ResponseModel response = await articleRepository.fetchArticle(
-          page, startString, endString, event.category ?? '',event.keyword??'',event.isSearch??false);
+      ResponseModel response = ResponseModel.resultsEmpty();
+      if(event.isMovie) {
+        response = await articleRepository.fetchArticle(
+            page, startString, endString, event.category ?? '',
+            event.keyword ?? '', event.isSearch ?? false);
+      } else {
+        response = await articleRepository.fetchArticleTv(
+            page, startString, endString, event.category ?? '',
+            event.keyword ?? '', event.isSearch ?? false);
+      }
       List<ArticleModel> data = [];
       String next = '';
 
@@ -129,7 +136,25 @@ class ArticlePageBloc extends Bloc<ArticlePageEvent, ArticlePageState> {
             isLast: isLast,
             next: next,
             type: 'fetching-article');
-      } else if (event.category == CategoryConstans.top_rated) {
+      } else if (event.category == CategoryConstans.airingToday) {
+        yield state.copyWith(
+            submitStatus: FormzStatus.submissionSuccess,
+            listArticleAiringToday: data,
+            listArticle: data,
+            page: page,
+            isLast: isLast,
+            next: next,
+            type: 'fetching-article');
+      } else if (event.category == CategoryConstans.onTheAir) {
+        yield state.copyWith(
+            submitStatus: FormzStatus.submissionSuccess,
+            listArticleOnTheAir: data,
+            listArticle: data,
+            page: page,
+            isLast: isLast,
+            next: next,
+            type: 'fetching-article');
+      }  else if (event.category == CategoryConstans.top_rated) {
         yield state.copyWith(
             submitStatus: FormzStatus.submissionSuccess,
             listArticleTopRated: data,
@@ -170,7 +195,7 @@ class ArticlePageBloc extends Bloc<ArticlePageEvent, ArticlePageState> {
     } on Exception catch (a) {}
   }
 
-  Stream<ArticlePageState> _mapArticleReadEventToState(
+  Stream<ArticlePageState> _mapArticleReadDetailEventToState(
     ArticleReadDetailEvent event,
     ArticlePageState state,
   ) async* {
@@ -178,8 +203,13 @@ class ArticlePageBloc extends Bloc<ArticlePageEvent, ArticlePageState> {
         submitStatus: FormzStatus.submissionInProgress,
         type: 'fetching-detail');
     try {
+      ArticleDetailModel response = ArticleDetailModel();
+      if(event.isMovie) {
+        response = await articleRepository.readDetailArticle(event.id);
+      }else{
+        response = await articleRepository.readDetailArticleTv(event.id);
 
-      ArticleDetailModel response = await articleRepository.readDetailArticle(event.id);
+      }
       if (response.id != null) {
         yield state.copyWith(
             submitStatus: FormzStatus.submissionSuccess,
@@ -202,7 +232,13 @@ class ArticlePageBloc extends Bloc<ArticlePageEvent, ArticlePageState> {
     //     type: 'fetching-video');
     try {
 
-      ResponseModel response = await articleRepository.readDetailVideoArticle(event.id);
+      ResponseModel response = ResponseModel.resultsEmpty();
+      if(event.isMovie) {
+        response = await articleRepository.readDetailVideoArticle(event.id);
+      } else{
+        response = await articleRepository.readDetailVideoArticleTv(event.id);
+
+      }
       if (response.results != null && response.results != []) {
         yield state.copyWith(
             submitStatus: FormzStatus.submissionSuccess,
@@ -238,9 +274,14 @@ class ArticlePageBloc extends Bloc<ArticlePageEvent, ArticlePageState> {
       if (event.page != 0) {
         page = event.page ?? 1;
       }
-
-      ResponseModel response = await articleRepository
-          .readRecommendationsMovieArticle(event.id, page);
+      ResponseModel response = ResponseModel.resultsEmpty();
+      if(event.isMovie) {
+        response = await articleRepository
+            .readRecommendationsMovieArticle(event.id, page);
+      } else{
+        response = await articleRepository
+            .readRecommendationsMovieArticleTv(event.id, page);
+      }
 
       if (response.results != null) {
         if (state.listArticle != null && event.page != 1) {

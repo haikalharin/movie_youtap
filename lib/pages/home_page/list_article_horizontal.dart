@@ -2,13 +2,13 @@ import 'dart:io';
 import 'dart:typed_data';
 
 
-import 'package:base_app_new/common/configurations/configurations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
+import '../../common/configurations/configurations.dart';
 import '../../common/injector/injector.dart';
 
 import '../../data/model/article_model/article_model.dart';
@@ -18,8 +18,9 @@ import '../list_article_page/bloc/article_bloc.dart';
 
 class ListArticleHorizontal extends StatelessWidget {
   List<ArticleModel>? listArticle = [];
+  bool? isMovie =false;
 
-  ListArticleHorizontal({this.listArticle});
+  ListArticleHorizontal({this.listArticle,this.isMovie});
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +41,7 @@ class ListArticleHorizontal extends StatelessWidget {
                       onTap: () {
 
                         Injector.resolve<ArticlePageBloc>()
-                            .add(ArticleReadDetailEvent( listArticle![index].id ?? 0));
+                            .add(ArticleReadDetailEvent( listArticle![index].id ?? 0,isMovie: isMovie??true));
                       },
                       child: Container(
                         height: 150.h,
@@ -75,7 +76,7 @@ class ListArticleHorizontal extends StatelessWidget {
                                         height: 70.h,
                                         margin: EdgeInsets.only(),
                                         child: Text(
-                                          listArticle![index].title!,
+                                          isMovie ==true?listArticle![index].title??'':listArticle![index].name??'',
                                           maxLines: 4,
                                           style: TextStyle(
                                               fontSize: 16,

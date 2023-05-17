@@ -70,5 +70,7 @@ class CategoryConstans{
   static const top_rated = 'top_rated';
   static const upcoming = 'upcoming';
   static const recommendations = 'recommendations';
+  static const airingToday = 'airing_today';
+  static const onTheAir = 'on_the_air';
   static const search = 'search';
 }

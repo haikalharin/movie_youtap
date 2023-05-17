@@ -1,5 +1,5 @@
 
-import 'package:base_app_new/common/exceptions/server_exception.dart';
+import 'package:netplix/common/exceptions/server_exception.dart';
 
 
 

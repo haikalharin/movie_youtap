@@ -27,6 +27,7 @@ class ArticleModel with _$ArticleModel {
     String? posterPath,
     String? releaseDate,
     String? title,
+    String? name,
     bool? video,
     double? voteAverage,
     int? voteCount,

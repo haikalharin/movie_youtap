@@ -1,6 +1,6 @@
 
 
-import 'package:base_app_new/data/model/article_detail_model/article_detail_model.dart';
+import 'package:netplix/data/model/article_detail_model/article_detail_model.dart';
 
 import '../../../common/exceptions/network_connection_exception.dart';
 import '../../../common/network/network_info.dart';
@@ -23,8 +23,21 @@ class ArticleRepositoryImpl extends ArticleRepository {
   }
 
   @override
+  Future<ResponseModel> fetchArticleTv(
+      int page,String start, String end,String category,String keyword, bool isSearch) async {
+    return remoteDatasource.fetchArticleTv(page.toString(),start,end,category,keyword,isSearch);
+
+  }
+
+  @override
   Future<ArticleDetailModel> readDetailArticle(int id) async {
       return remoteDatasource.readDetailArticle(id);
+
+  }
+
+  @override
+  Future<ArticleDetailModel> readDetailArticleTv(int id) async {
+    return remoteDatasource.readDetailArticleTv(id);
 
   }
 
@@ -33,9 +46,21 @@ class ArticleRepositoryImpl extends ArticleRepository {
     return remoteDatasource.readDetailVideoArticle(id);
 
   }
+
+  @override
+  Future<ResponseModel> readDetailVideoArticleTv(int id) async {
+    return remoteDatasource.readDetailVideoArticleTv(id);
+
+  }
 @override
   Future<ResponseModel> readRecommendationsMovieArticle(int id,int page) async {
     return remoteDatasource.readRecommendationsMovieArticle(id,page);
+
+  }
+
+@override
+  Future<ResponseModel> readRecommendationsMovieArticleTv(int id,int page) async {
+    return remoteDatasource.readRecommendationsMovieArticleTv(id,page);
 
   }
 

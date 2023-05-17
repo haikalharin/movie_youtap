@@ -9,7 +9,6 @@ import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import '../../common/configurations/configurations.dart';
 import '../../common/injector/injector.dart';
 import '../../data/model/article_model/article_model.dart';
-import '../../routes/route_name.dart';
 import '../../utils/epragnancy_color.dart';
 import 'bloc/article_bloc.dart';
 
@@ -18,9 +17,14 @@ class ListArticleVertical extends StatefulWidget {
   String? category = '';
   String? title = '';
   bool? isSearch = false;
+  bool? isMovie = true;
 
   ListArticleVertical(
-      {this.listArticle, this.category,this.title, this.isSearch = false});
+      {this.listArticle,
+      this.category,
+      this.title,
+      this.isSearch = false,
+      this.isMovie = false});
 
   @override
   State<ListArticleVertical> createState() => _ListArticleVerticalState();
@@ -37,9 +41,12 @@ class _ListArticleVerticalState extends State<ListArticleVertical> {
 
   Future<void> _handleRefresh() async {
     if (widget.isSearch == false) {
-      Injector.resolve<ArticlePageBloc>()
-          .add(
-          ArticleFetchEvent(page: 1, category: _category,isRefresh: true, isSearch: false));
+      Injector.resolve<ArticlePageBloc>().add(ArticleFetchEvent(
+          page: 1,
+          category: _category,
+          isRefresh: true,
+          isSearch: false,
+          isMovie: widget.isMovie ?? true));
     }
   }
 
@@ -73,7 +80,7 @@ class _ListArticleVerticalState extends State<ListArticleVertical> {
           appBar: AppBar(
             title: Text(
               _category.contains('_')
-                  ? _category.replaceFirst('_', ' ')
+                  ? _category.replaceAll('_', ' ')
                   : _category,
             ),
           ),
@@ -88,16 +95,17 @@ class _ListArticleVerticalState extends State<ListArticleVertical> {
                   textInputAction: TextInputAction.search,
                   onFieldSubmitted: (keyWord) {
                     setState(() {
-                      _isGetData = true;
-                    });
+                            _isGetData = true;
+                          });
 
-                    Injector.resolve<ArticlePageBloc>().add(
-                        ArticleFetchEvent(
-                            page: 1,
-                            category: _category,
-                            keyword: _searchTextController.text,
-                            isSearch: true));
-                  },
+                          Injector.resolve<ArticlePageBloc>().add(
+                              ArticleFetchEvent(
+                                  page: 1,
+                                  category: _category,
+                                  keyword: _searchTextController.text,
+                                  isSearch: true,
+                                  isMovie: widget.isMovie ?? true));
+                        },
                   decoration: InputDecoration(
                     prefixIconConstraints:
                     BoxConstraints(maxHeight: 35, maxWidth: 35),
@@ -114,15 +122,16 @@ class _ListArticleVerticalState extends State<ListArticleVertical> {
                     suffixIcon: InkWell(
                       onTap: () {
                         setState(() {
-                          _isGetData = true;
-                        });
-                        _searchTextController.clear();
-                        Injector.resolve<ArticlePageBloc>().add(
-                            ArticleFetchEvent(
-                                page: 1,
-                                category: _category,
-                                keyword: ''));
-                        // Injector.resolve<PatientSelectBloc>().add(FetchPatientEvent(''));
+                                _isGetData = true;
+                              });
+                              _searchTextController.clear();
+                              Injector.resolve<ArticlePageBloc>().add(
+                                  ArticleFetchEvent(
+                                      page: 1,
+                                      category: _category,
+                                      keyword: '',
+                                      isMovie: widget.isMovie ?? true));
+                              // Injector.resolve<PatientSelectBloc>().add(FetchPatientEvent(''));
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -195,22 +204,31 @@ class _ListArticleVerticalState extends State<ListArticleVertical> {
                                       if (!state.isLast) {
                                         if (widget.isSearch ==
                                             true) {
+                                          Injector
+                                                            .resolve<
+                                                                ArticlePageBloc>()
+                                                        .add(ArticleFetchEvent(
+                                                            isBottomScroll:
+                                                                true,
+                                                            category: _category,
+                                                            isSearch: true,
+                                                            keyword:
+                                                                _searchTextController
+                                                                    .text,
+                                                            isMovie: widget
+                                                                    .isMovie ??
+                                                                true));
+                                                  } else {
                                           Injector.resolve<
-                                              ArticlePageBloc>()
-                                              .add(ArticleFetchEvent(
-                                              isBottomScroll:
-                                              true,
-                                              category:
-                                              _category,isSearch: true,keyword: _searchTextController.text));
-                                        } else {
-                                          Injector.resolve<
-                                              ArticlePageBloc>()
-                                              .add(ArticleFetchEvent(
-                                              isBottomScroll:
-                                              true,
-                                              category:
-                                              _category));
-                                        }
+                                                            ArticlePageBloc>()
+                                                        .add(ArticleFetchEvent(
+                                                            isBottomScroll:
+                                                                true,
+                                                            category: _category,
+                                                            isMovie: widget
+                                                                    .isMovie ??
+                                                                true));
+                                                  }
                                       }
                                     },
                                     child: Scrollbar(
@@ -250,7 +268,8 @@ class _ListArticleVerticalState extends State<ListArticleVertical> {
 }
 
 class _ListArticleBody extends StatelessWidget {
-  _ListArticleBody();
+  _ListArticleBody({this.isMovie = true});
+  bool? isMovie;
 
 
 
@@ -276,7 +295,7 @@ class _ListArticleBody extends StatelessWidget {
             onTap: () {
               Injector.resolve<ArticlePageBloc>()
                   .add(
-                  ArticleReadDetailEvent(state.listArticle![index].id ?? 0));
+                  ArticleReadDetailEvent(state.listArticle![index].id ?? 0,isMovie: isMovie??true));
             },
             child: Container(
               height: 300,
