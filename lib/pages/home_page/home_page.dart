@@ -74,7 +74,7 @@ class _HomePage extends State<HomePage> {
           Navigator.of(context).pushNamed(
               RouteName.articleDetailPage,arguments: {
             "id": state.articleDetailModel?.id,
-            "is_movie": false,
+            "is_movie": true,
           });
         }
       },
